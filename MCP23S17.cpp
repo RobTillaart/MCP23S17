@@ -546,7 +546,6 @@ uint8_t MCP23S17::readReg(uint8_t reg)
     rv = swSPI_transfer(0xFF);
   }
   ::digitalWrite(_select, HIGH);
-
   return rv;
 }
 

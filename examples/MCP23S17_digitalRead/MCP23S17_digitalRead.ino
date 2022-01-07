@@ -10,6 +10,7 @@
 
 
 MCP23S17 MCP(10);
+int rv = 0;
 
 void setup()
 {
@@ -20,10 +21,17 @@ void setup()
   delay(100);
 
   SPI.begin();
-  MCP.begin();
+  rv = MCP.begin();
+  Serial.println(rv);
 
-  MCP.pinMode8(0, 0xFF);   // CHECK
-  MCP.pinMode8(1, 0xFF);
+  rv = MCP.pinMode8(0, 0xFF);   // CHECK
+  Serial.println(rv);
+  rv = MCP.pinMode8(1, 0xFF);
+  Serial.println(rv);
+
+
+  Serial.print("HWSPI: ");
+  Serial.println(MCP.usesHWSPI());
 
   Serial.println("TEST digitalRead(pin)");
   for (int pin = 0; pin < 16; pin++)
@@ -38,6 +46,17 @@ void setup()
 
 void loop()
 {
+  delay(1000);
+  Serial.println("TEST digitalRead(pin)");
+  for (int pin = 0; pin < 16; pin++)
+  {
+    int val = MCP.digitalRead(pin);
+    Serial.print(val);
+    Serial.print(' ');
+    delay(100);
+  }
+  Serial.println();
+
 }
 
 
