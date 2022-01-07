@@ -13,7 +13,7 @@
   "repository":
   {
     "type": "git",
-    "url": "https://github.com/RobTillaart/MCP23S17_RT.git"
+    "url": "https://github.com/RobTillaart/MCP23S17.git"
   },
   "version": "0.1.0",
   "license": "MIT",
