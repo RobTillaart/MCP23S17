@@ -81,7 +81,7 @@ private:
   uint8_t   _error   = MCP23S17_OK;
 
   bool        _hwSPI = false;
-  uint32_t    _SPIspeed = 1000000UL;   // 1MHz is a safe value TODO CHECK datasheet
+  uint32_t    _SPIspeed = 8000000UL;   // 1MHz is a safe value TODO CHECK datasheet
   SPIClass    * mySPI;
   SPISettings _spi_settings;
 
