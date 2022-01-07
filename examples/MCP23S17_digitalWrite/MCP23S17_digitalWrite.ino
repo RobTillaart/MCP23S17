@@ -8,7 +8,7 @@
 #include "MCP23S17.h"
 #include "SPI.h"
 
-MCP23S17 MCP(10, 5, 6, 7);
+MCP23S17 MCP(10, 5, 6, 7);   // SW SPI   address 0x00
 
 
 void setup()
@@ -71,3 +71,4 @@ void loop()
 
 
 // -- END OF FILE --
+

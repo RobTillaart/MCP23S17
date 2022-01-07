@@ -51,7 +51,7 @@ unittest(test_constants)
 {
   assertEqual(MCP23S17_OK          , 0x00);
   assertEqual(MCP23S17_PIN_ERROR   , 0x81);
-  assertEqual(MCP23S17_I2C_ERROR   , 0x82);
+  assertEqual(MCP23S17_SPI_ERROR   , 0x82);
   assertEqual(MCP23S17_VALUE_ERROR , 0x83);
   assertEqual(MCP23S17_PORT_ERROR  , 0x84);
   assertEqual(MCP23S17_INVALID_READ, -100);

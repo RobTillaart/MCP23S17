@@ -12,6 +12,7 @@
 MCP23S17 MCP(10);
 int rv = 0;
 
+
 void setup()
 {
   Serial.begin(115200);
@@ -44,6 +45,7 @@ void setup()
   Serial.println();
 }
 
+
 void loop()
 {
   delay(1000);
@@ -61,3 +63,4 @@ void loop()
 
 
 // -- END OF FILE --
+
