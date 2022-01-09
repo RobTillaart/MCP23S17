@@ -26,7 +26,7 @@ Programming Interface is kept the same as much as possible.
 - **MCP23S17(uint8_t select, uint8_t data, uint8_t clock)** constructor SW SPI
 - **MCP23S17(uint8_t select)** constructor HW SPI
 - **bool begin()** returns true if successful.
-- **bool isConnected()** returns true if connected, false otherwise.
+- **bool isConnected()** returns true if connected, false otherwise. (dummy)
 
 
 ### Single pin interface
@@ -84,4 +84,4 @@ See examples.
 ## Future
 
 - keep functional in sync with MCP23017_RT
-
+- **isConnected()** is not really needed

@@ -27,8 +27,6 @@
 class MCP23S17
 {
 public:
-  // MCP23S17();
-
   MCP23S17(uint8_t select, uint8_t dataIn, uint8_t dataOut, uint8_t clock, uint8_t address = 0x00);
   MCP23S17(uint8_t select, uint8_t address = 0x00);
 
