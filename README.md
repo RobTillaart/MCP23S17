@@ -15,7 +15,7 @@ Arduino library for MCP23S17 16 channel SPI port expander.
 
 This experimental library gives easy control over the 16 pins of a (SPI) MCP23S17 chip.
 
-This IC is strongly related tot the MCP23017 I2C port expander - https://github.com/RobTillaart/MCP23017_RT
+This IC is strongly related to the MCP23017 I2C port expander - https://github.com/RobTillaart/MCP23017_RT
 Programming Interface is kept the same as much as possible.
 
 
