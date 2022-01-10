@@ -5,7 +5,7 @@
 // VERSION: 0.1.1
 // PURPOSE: Arduino library for SPI MCP23S17 16 channel port expander
 //    DATE: 2021-12-30
-//     URL: https://github.com/RobTillaart/MCP23S17_RT
+//     URL: https://github.com/RobTillaart/MCP23S17
 
 
 #include "Arduino.h"
