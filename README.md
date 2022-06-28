@@ -87,6 +87,4 @@ See examples.
 - **isConnected()** is not really needed
 - implement ESP32 specific support - see MCP_ADC.begin()
 - replace magic numbers with a defined constant
-- fix lint badge.
-
 
