@@ -2,7 +2,7 @@
 //
 //    FILE: MCP23S17.h
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.2.0
+// VERSION: 0.2.1
 // PURPOSE: Arduino library for SPI MCP23S17 16 channel port expander
 //    DATE: 2021-12-30
 //     URL: https://github.com/RobTillaart/MCP23S17
@@ -12,7 +12,7 @@
 #include "SPI.h"
 
 
-#define MCP23S17_LIB_VERSION              (F("0.2.0"))
+#define MCP23S17_LIB_VERSION              (F("0.2.1"))
 
 #define MCP23S17_OK                       0x00
 #define MCP23S17_PIN_ERROR                0x81
@@ -27,8 +27,11 @@
 class MCP23S17
 {
 public:
+  //  SW SPI
   MCP23S17(uint8_t select, uint8_t dataIn, uint8_t dataOut, uint8_t clock, uint8_t address = 0x00);
-  MCP23S17(uint8_t select, uint8_t address = 0x00);
+  //  HW SPI
+  MCP23S17(uint8_t select, SPIClass* spi);
+  MCP23S17(uint8_t select, uint8_t address = 0x00, SPIClass* spi = &SPI);
 
   bool     begin();
   bool     isConnected();  // needed ?
@@ -92,7 +95,7 @@ private:
 
   bool        _hwSPI = false;
   uint32_t    _SPIspeed = 8000000UL;   // 1MHz is a safe value TODO CHECK datasheet
-  SPIClass    * mySPI;
+  SPIClass    * _mySPI;
   SPISettings _spi_settings;
 
   uint8_t  swSPI_transfer(uint8_t val);

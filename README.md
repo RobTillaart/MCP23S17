@@ -23,10 +23,26 @@ Programming Interface is kept the same as much as possible.
 
 ### Constructor
 
-- **MCP23S17(uint8_t select, uint8_t data, uint8_t clock)** constructor SW SPI
-- **MCP23S17(uint8_t select)** constructor HW SPI
+- **MCP23S17(uint8_t select, uint8_t data, uint8_t clock, uint8_t address = 0x00)** constructor SW SPI.
+- **MCP23S17(uint8_t select, SPIClass\* spi)** constructor HW SPI with explicit SPI interface selected.
+- **MCP23S17(uint8_t select, uint8_t address = 0x00, SPIClass\* spi = &SPI)** constructor HW SPI with optional address pins and SPI interface.
 - **bool begin()** returns true if successful.
 - **bool isConnected()** returns true if connected, false otherwise. (dummy)
+
+The above would allow to call 4 different constructors.
+```cpp
+- MCP23S17(10);            // select pin only
+- MCP23S17(10, 7);         // select pin + address pins
+- MCP23S17(10, 7, &SPI1);  // select pin + address pins + SPI port
+- MCP23S17(10, &SPI);      // select pin + SPI port
+```
+
+#### sharing select lines
+
+(not tested)
+Technically two chips could use the same select pin and a different address. 
+The constructors would allow to setup such a configuration.
+I assume that this is less used and imho not recommended.
 
 
 ### Single pin interface

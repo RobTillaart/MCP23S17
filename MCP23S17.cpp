@@ -1,7 +1,7 @@
 //
 //    FILE: MCP23S17.cpp
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.2.0
+// VERSION: 0.2.1
 // PURPOSE: Arduino library for SPI MCP23S17 16 channel port expander
 //    DATE: 2021-12-30
 //     URL: https://github.com/RobTillaart/MCP23S17
@@ -12,7 +12,12 @@
 //  0.1.1   2022-01-10  add 16 bit interface
 //  0.1.2   2022-01-12  change the URL for library manager
 //  0.1.3   2022-04-13  fix compiling for NANO33 BLE
+//
 //  0.2.0   2022-06-28  fix #10 incorrect mask
+//  0.2.1   2022-06-29  add SPIClass as parameter for constructor (See #10)
+//                      redo constructors.
+//                      update readme.md
+
 
 
 #include "Arduino.h"
@@ -57,13 +62,8 @@
 #define MCP23S17_WRITE_REG    0x40
 #define MCP23S17_READ_REG     0x41
 
-/*
-MCP23S17::MCP23S17()
-{
-}
-*/
 
-
+//  SW SPI
 MCP23S17::MCP23S17(uint8_t select, uint8_t dataIn, uint8_t dataOut, uint8_t clock, uint8_t address)
 {
   _address = address;
@@ -76,11 +76,18 @@ MCP23S17::MCP23S17(uint8_t select, uint8_t dataIn, uint8_t dataOut, uint8_t cloc
 }
 
 
-MCP23S17::MCP23S17(uint8_t select, uint8_t address)
+//  HW SPI
+MCP23S17::MCP23S17(uint8_t select, SPIClass* spi)
+{
+  MCP23S17(select, 0x00, spi);
+}
+
+MCP23S17::MCP23S17(uint8_t select, uint8_t address, SPIClass* spi)
 {
   _address = address;
   _select  = select;
   _error   = MCP23S17_OK;
+  _mySPI   = spi;
   _hwSPI   = true;
 }
 
@@ -90,14 +97,14 @@ bool MCP23S17::begin()
   ::pinMode(_select, OUTPUT);
   ::digitalWrite(_select, HIGH);
 
-  _spi_settings = SPISettings(_SPIspeed, MSBFIRST, SPI_MODE0);//  8 MHz - datasheet page 8
+  _spi_settings = SPISettings(_SPIspeed, MSBFIRST, SPI_MODE0);  //  8 MHz - datasheet page 8
 
   if (_hwSPI)
   {
     // TODO - ESP32 specific support - see MCP_ADC.
-    mySPI = &SPI;
-    mySPI->end();
-    mySPI->begin();
+    // _mySPI = &SPI;  //  set in constructor  #10
+    _mySPI->end();
+    _mySPI->begin();
   }
   else
   {
@@ -124,6 +131,7 @@ bool MCP23S17::begin()
 }
 
 
+//  to keep interface in sync with I2C MCP23017 library.
 bool MCP23S17::isConnected()
 {
   _error = MCP23S17_OK;
@@ -606,11 +614,11 @@ bool MCP23S17::writeReg(uint8_t reg, uint8_t value)
   ::digitalWrite(_select, LOW);
   if (_hwSPI)
   {
-    mySPI->beginTransaction(_spi_settings);
-    mySPI->transfer(MCP23S17_WRITE_REG | (_address << 1) );
-    mySPI->transfer(reg);
-    mySPI->transfer(value);
-    mySPI->endTransaction();
+    _mySPI->beginTransaction(_spi_settings);
+    _mySPI->transfer(MCP23S17_WRITE_REG | (_address << 1) );
+    _mySPI->transfer(reg);
+    _mySPI->transfer(value);
+    _mySPI->endTransaction();
   }
   else
   {
@@ -638,11 +646,11 @@ uint8_t MCP23S17::readReg(uint8_t reg)
   ::digitalWrite(_select, LOW);
   if (_hwSPI)
   {
-    mySPI->beginTransaction(_spi_settings);
-    mySPI->transfer(MCP23S17_READ_REG | (_address << 1) );  // TODO OPTIMIZE n times
-    mySPI->transfer(reg);
-    rv = mySPI->transfer(0xFF);
-    mySPI->endTransaction();
+    _mySPI->beginTransaction(_spi_settings);
+    _mySPI->transfer(MCP23S17_READ_REG | (_address << 1) );  // TODO OPTIMIZE n times
+    _mySPI->transfer(reg);
+    rv = _mySPI->transfer(0xFF);
+    _mySPI->endTransaction();
   }
   else
   {
