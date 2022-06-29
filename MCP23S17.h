@@ -19,6 +19,7 @@
 #define MCP23S17_SPI_ERROR                0x82
 #define MCP23S17_VALUE_ERROR              0x83
 #define MCP23S17_PORT_ERROR               0x84
+#define MCP23S17_REGISTER_ERROR           0xFF
 
 
 #define MCP23S17_INVALID_READ             -100

@@ -62,7 +62,9 @@ unittest(test_SW_constructor)
 {
   MCP23S17 mcp_sw(10, 11, 12, 13);  //  default address 0x00
   assertEqual(0x00, mcp_sw.getAddress());
-
+  assertFalse(mcp_sw.usesHWSPI());
+  assertEqual(MCP23S17_OK, mcp_sw.lastError());
+  
   for (int addr = 0; addr < 8; addr++)
   {
     MCP23S17 mcp_sw(10, 11, 12, 13, addr);
@@ -75,7 +77,9 @@ unittest(test_HW_constructors)
 {
   MCP23S17 mcp_hw0(10);
   assertEqual(0x00, mcp_hw0.getAddress());
-
+  assertTrue(mcp_hw0.usesHWSPI());
+  assertEqual(MCP23S17_OK, mcp_hw0.lastError());
+  
   for (int addr = 0; addr < 8; addr++)
   {
     MCP23S17 mcp_hw(10, addr);
@@ -83,12 +87,162 @@ unittest(test_HW_constructors)
   }
 
   MCP23S17 mcp_hw1(10, &SPI);
-  assertEqual(0x00, mcp_hw0.getAddress());
+  assertEqual(0x00, mcp_hw1.getAddress());
+  assertTrue(mcp_hw1.usesHWSPI());
 
   for (int addr = 0; addr < 8; addr++)
   {
     MCP23S17 mcp_hw(10, addr, &SPI);
     assertEqual(addr, mcp_hw.getAddress());
+  }
+}
+
+
+////////////////////////////////////////////////////////////
+//
+//  1 bit interface
+//
+unittest(test_pinMode)
+{
+  MCP23S17 mcp_hw(10);
+  assertEqual(MCP23S17_OK, mcp_hw.lastError());
+
+  assertFalse(mcp_hw.pinMode(16, INPUT));
+  assertEqual(MCP23S17_PIN_ERROR, mcp_hw.lastError());
+  assertFalse(mcp_hw.pinMode(0, 4));
+  assertEqual(MCP23S17_VALUE_ERROR, mcp_hw.lastError());
+}
+
+
+unittest(test_digitalWrite)
+{
+  MCP23S17 mcp_hw(10);
+  assertEqual(MCP23S17_OK, mcp_hw.lastError());
+
+  assertFalse(mcp_hw.digitalWrite(16, 0));
+  assertEqual(MCP23S17_PIN_ERROR, mcp_hw.lastError());
+}
+
+
+unittest(test_digitalRead)
+{
+  MCP23S17 mcp_hw(10);
+  assertEqual(MCP23S17_OK, mcp_hw.lastError());
+
+  assertEqual(MCP23S17_INVALID_READ, mcp_hw.digitalRead(16));
+  assertEqual(MCP23S17_PIN_ERROR, mcp_hw.lastError());
+}
+
+
+unittest(test_Polarity)
+{
+  MCP23S17 mcp_hw(10);
+  assertEqual(MCP23S17_OK, mcp_hw.lastError());
+
+  assertFalse(mcp_hw.setPolarity(16, true));
+  assertEqual(MCP23S17_PIN_ERROR, mcp_hw.lastError());
+
+  assertFalse(mcp_hw.getPolarity(16));
+  assertEqual(MCP23S17_PIN_ERROR, mcp_hw.lastError());
+}
+
+
+unittest(test_Pullup)
+{
+  MCP23S17 mcp_hw(10);
+  assertEqual(MCP23S17_OK, mcp_hw.lastError());
+
+  assertFalse(mcp_hw.setPullup(16, true));
+  assertEqual(MCP23S17_PIN_ERROR, mcp_hw.lastError());
+
+  assertFalse(mcp_hw.getPullup(16));
+  assertEqual(MCP23S17_PIN_ERROR, mcp_hw.lastError());
+}
+
+
+////////////////////////////////////////////////////////////
+//
+//  8 bit interface
+//
+unittest(test_pinMode8)
+{
+  MCP23S17 mcp_hw(10);
+  assertEqual(MCP23S17_OK, mcp_hw.lastError());
+
+  assertFalse(mcp_hw.pinMode8(2, 0xFF));
+  assertEqual(MCP23S17_PORT_ERROR, mcp_hw.lastError());
+}
+
+
+unittest(test_Write8)
+{
+  MCP23S17 mcp_hw(10);
+  assertEqual(MCP23S17_OK, mcp_hw.lastError());
+
+  assertFalse(mcp_hw.write8(2, HIGH));
+  assertEqual(MCP23S17_PORT_ERROR, mcp_hw.lastError());
+}
+
+
+unittest(test_Read8)
+{
+  MCP23S17 mcp_hw(10);
+  assertEqual(MCP23S17_OK, mcp_hw.lastError());
+
+  assertEqual(MCP23S17_INVALID_READ, mcp_hw.read8(2));
+  assertEqual(MCP23S17_PORT_ERROR, mcp_hw.lastError());
+}
+
+
+unittest(test_Polarity8)
+{
+  MCP23S17 mcp_hw(10);
+  assertEqual(MCP23S17_OK, mcp_hw.lastError());
+
+  assertFalse(mcp_hw.setPolarity8(2, 0xFF));
+  assertEqual(MCP23S17_PORT_ERROR, mcp_hw.lastError());
+
+  assertFalse(mcp_hw.getPolarity(2));
+  assertEqual(MCP23S17_PORT_ERROR, mcp_hw.lastError());
+}
+
+
+unittest(test_Pullup8)
+{
+  MCP23S17 mcp_hw(10);
+  assertEqual(MCP23S17_OK, mcp_hw.lastError());
+
+  assertFalse(mcp_hw.setPullup8(2, 0xFF));
+  assertEqual(MCP23S17_PORT_ERROR, mcp_hw.lastError());
+
+  assertFalse(mcp_hw.getPullup8(2));
+  assertEqual(MCP23S17_PORT_ERROR, mcp_hw.lastError());
+}
+
+
+////////////////////////////////////////////////////////////
+//
+//  16 bit interface
+//
+//  no testable calls yet.
+
+
+
+
+
+////////////////////////////////////////////////////////////
+//
+//  MISC
+//
+unittest(test_SPIspeed)
+{
+  MCP23S17 mcp_hw(10);
+  assertEqual(MCP23S17_OK, mcp_hw.lastError());
+
+  for (uint32_t speed = 1000000; speed < 16000000; speed += 1000000)
+  {
+    mcp_hw.setSPIspeed(1000000));
+    assertEqual(mcp_hw.getSPIspeed());
   }
 }
 

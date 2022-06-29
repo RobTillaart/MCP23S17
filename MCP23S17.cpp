@@ -16,7 +16,7 @@
 //  0.2.0   2022-06-28  fix #10 incorrect mask
 //  0.2.1   2022-06-29  add SPIClass as parameter for constructor (See #10)
 //                      redo constructors.
-//                      add getAddress()
+//                      add getAddress() + optimized (_address << 1)
 //                      update readme.md
 
 
@@ -67,7 +67,7 @@
 //  SW SPI
 MCP23S17::MCP23S17(uint8_t select, uint8_t dataIn, uint8_t dataOut, uint8_t clock, uint8_t address)
 {
-  _address = address;
+  _address = (address << 1);
   _select  = select;
   _dataIn  = dataIn;
   _dataOut = dataOut;
@@ -85,7 +85,7 @@ MCP23S17::MCP23S17(uint8_t select, SPIClass* spi)
 
 MCP23S17::MCP23S17(uint8_t select, uint8_t address, SPIClass* spi)
 {
-  _address = address;
+  _address = (address << 1);
   _select  = select;
   _error   = MCP23S17_OK;
   _mySPI   = spi;
@@ -102,7 +102,6 @@ bool MCP23S17::begin()
 
   if (_hwSPI)
   {
-    //  TODO - ESP32 specific support - see MCP_ADC.
     // _mySPI = &SPI;  //  set in constructor  #10
     _mySPI->end();
     _mySPI->begin();
@@ -142,7 +141,7 @@ bool MCP23S17::isConnected()
 
 uint8_t MCP23S17::getAddress()
 {
-  return _address;
+  return (_address >> 1);
 }
 
 
@@ -615,21 +614,23 @@ bool MCP23S17::writeReg(uint8_t reg, uint8_t value)
 
   if (reg > MCP23S17_OLAT_B)
   {
-    _error = 0xFF;   // TODO MAGIC NR
+    _error = MCP23S17_REGISTER_ERROR;
     return false;
   }
   ::digitalWrite(_select, LOW);
   if (_hwSPI)
   {
     _mySPI->beginTransaction(_spi_settings);
-    _mySPI->transfer(MCP23S17_WRITE_REG | (_address << 1) );
+    //  _address already shifted
+    _mySPI->transfer(MCP23S17_WRITE_REG | _address ); 
     _mySPI->transfer(reg);
     _mySPI->transfer(value);
     _mySPI->endTransaction();
   }
   else
   {
-    swSPI_transfer(MCP23S17_WRITE_REG | (_address << 1) );
+    //  _address already shifted
+    swSPI_transfer(MCP23S17_WRITE_REG | _address );
     swSPI_transfer(reg);
     swSPI_transfer(value);
   }
@@ -646,7 +647,7 @@ uint8_t MCP23S17::readReg(uint8_t reg)
 
   if (reg > MCP23S17_OLAT_B)
   {
-    _error = 0xFF;   // TODO MAGIC NR
+    _error = MCP23S17_REGISTER_ERROR;
     return false;
   }
 
@@ -654,14 +655,16 @@ uint8_t MCP23S17::readReg(uint8_t reg)
   if (_hwSPI)
   {
     _mySPI->beginTransaction(_spi_settings);
-    _mySPI->transfer(MCP23S17_READ_REG | (_address << 1) );  // TODO OPTIMIZE n times
+    //  _address already shifted
+    _mySPI->transfer(MCP23S17_READ_REG | _address );
     _mySPI->transfer(reg);
     rv = _mySPI->transfer(0xFF);
     _mySPI->endTransaction();
   }
   else
   {
-    swSPI_transfer(MCP23S17_READ_REG | (_address << 1) );
+    //  _address already shifted
+    swSPI_transfer(MCP23S17_READ_REG | _address );
     swSPI_transfer(reg);
     rv = swSPI_transfer(0xFF);
   }
