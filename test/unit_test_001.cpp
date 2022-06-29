@@ -241,8 +241,8 @@ unittest(test_SPIspeed)
 
   for (uint32_t speed = 1000000; speed < 16000000; speed += 1000000)
   {
-    mcp_hw.setSPIspeed(1000000));
-    assertEqual(mcp_hw.getSPIspeed());
+    mcp_hw.setSPIspeed(1000000);
+    assertEqual(speed, mcp_hw.getSPIspeed());
   }
 }
 
