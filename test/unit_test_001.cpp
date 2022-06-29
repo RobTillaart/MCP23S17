@@ -49,12 +49,17 @@ unittest_teardown()
 
 unittest(test_constants)
 {
-  assertEqual(MCP23S17_OK          , 0x00);
-  assertEqual(MCP23S17_PIN_ERROR   , 0x81);
-  assertEqual(MCP23S17_SPI_ERROR   , 0x82);
-  assertEqual(MCP23S17_VALUE_ERROR , 0x83);
-  assertEqual(MCP23S17_PORT_ERROR  , 0x84);
-  assertEqual(MCP23S17_INVALID_READ, -100);
+  assertEqual(MCP23S17_OK            , 0x00);
+  assertEqual(MCP23S17_PIN_ERROR     , 0x81);
+  assertEqual(MCP23S17_SPI_ERROR     , 0x82);
+  assertEqual(MCP23S17_VALUE_ERROR   , 0x83);
+  assertEqual(MCP23S17_PORT_ERROR    , 0x84);
+  assertEqual(MCP23S17_REGISTER_ERROR, 0xFF);
+  assertEqual(MCP23S17_INVALID_READ  , 0xFF);
+
+  fprintf(stderr, "\nSPI-speed\n");
+  assertEqual(MCP23S17_TYP_SPI_SPEED , 8000000);
+  assertEqual(MCP23S17_MAX_SPI_SPEED , 10000000);
 }
 
 

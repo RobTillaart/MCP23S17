@@ -25,6 +25,11 @@
 #define MCP23S17_INVALID_READ             0xFF
 
 
+const uint32_t MCP23S17_TYP_SPI_SPEED =  8000000;
+const uint32_t MCP23S17_MAX_SPI_SPEED = 10000000;
+
+
+
 class MCP23S17
 {
 public:
@@ -97,7 +102,7 @@ private:
 
   bool        _hwSPI;
   // 10 MHz is maximum, 8 is a better clock divider
-  uint32_t    _SPIspeed = 8000000UL;
+  uint32_t    _SPIspeed = MCP23S17_TYP_SPI_SPEED;
   SPIClass *  _mySPI;
   SPISettings _spi_settings;
 
