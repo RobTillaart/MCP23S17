@@ -205,7 +205,7 @@ unittest(test_Polarity8)
   assertFalse(mcp_hw.setPolarity8(2, 0xFF));
   assertEqual(MCP23S17_PORT_ERROR, mcp_hw.lastError());
 
-  assertFalse(mcp_hw.getPolarity(2, mask));
+  assertFalse(mcp_hw.getPolarity8(2, mask));
   assertEqual(MCP23S17_PORT_ERROR, mcp_hw.lastError());
 }
 
