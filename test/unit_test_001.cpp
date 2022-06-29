@@ -93,12 +93,15 @@ unittest(test_HW_constructors)
 
   MCP23S17 mcp_hw1(10, &SPI);
   assertEqual(0x00, mcp_hw1.getAddress());
+  
+  fprintf(stderr, "\nHWSPI %d\n", mcp_hw1.usesHWSPI());
   assertTrue(mcp_hw1.usesHWSPI());
 
   for (int addr = 0; addr < 8; addr++)
   {
     MCP23S17 mcp_hw(10, addr, &SPI);
     assertEqual(addr, mcp_hw.getAddress());
+    assertTrue(mcp_hw.usesHWSPI());
   }
 }
 
