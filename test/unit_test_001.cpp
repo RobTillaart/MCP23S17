@@ -136,26 +136,28 @@ unittest(test_digitalRead)
 
 unittest(test_Polarity)
 {
+  bool flag;
   MCP23S17 mcp_hw(10);
   assertEqual(MCP23S17_OK, mcp_hw.lastError());
 
   assertFalse(mcp_hw.setPolarity(16, true));
   assertEqual(MCP23S17_PIN_ERROR, mcp_hw.lastError());
 
-  assertFalse(mcp_hw.getPolarity(16));
+  assertFalse(mcp_hw.getPolarity(16, flag));
   assertEqual(MCP23S17_PIN_ERROR, mcp_hw.lastError());
 }
 
 
 unittest(test_Pullup)
 {
+  bool flag; 
   MCP23S17 mcp_hw(10);
   assertEqual(MCP23S17_OK, mcp_hw.lastError());
 
   assertFalse(mcp_hw.setPullup(16, true));
   assertEqual(MCP23S17_PIN_ERROR, mcp_hw.lastError());
 
-  assertFalse(mcp_hw.getPullup(16));
+  assertFalse(mcp_hw.getPullup(16, flag));
   assertEqual(MCP23S17_PIN_ERROR, mcp_hw.lastError());
 }
 
@@ -196,26 +198,28 @@ unittest(test_Read8)
 
 unittest(test_Polarity8)
 {
+  uint8_t mask;
   MCP23S17 mcp_hw(10);
   assertEqual(MCP23S17_OK, mcp_hw.lastError());
 
   assertFalse(mcp_hw.setPolarity8(2, 0xFF));
   assertEqual(MCP23S17_PORT_ERROR, mcp_hw.lastError());
 
-  assertFalse(mcp_hw.getPolarity(2));
+  assertFalse(mcp_hw.getPolarity(2, mask));
   assertEqual(MCP23S17_PORT_ERROR, mcp_hw.lastError());
 }
 
 
 unittest(test_Pullup8)
 {
+  uint8_t mask;
   MCP23S17 mcp_hw(10);
   assertEqual(MCP23S17_OK, mcp_hw.lastError());
 
   assertFalse(mcp_hw.setPullup8(2, 0xFF));
   assertEqual(MCP23S17_PORT_ERROR, mcp_hw.lastError());
 
-  assertFalse(mcp_hw.getPullup8(2));
+  assertFalse(mcp_hw.getPullup8(2, mask));
   assertEqual(MCP23S17_PORT_ERROR, mcp_hw.lastError());
 }
 
