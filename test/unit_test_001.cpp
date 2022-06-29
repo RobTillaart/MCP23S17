@@ -69,7 +69,7 @@ unittest(test_SW_constructor)
   assertEqual(0x00, mcp_sw.getAddress());
   assertFalse(mcp_sw.usesHWSPI());
   assertEqual(MCP23S17_OK, mcp_sw.lastError());
-  
+
   for (int addr = 0; addr < 8; addr++)
   {
     MCP23S17 mcp_sw(10, 11, 12, 13, addr);
@@ -84,7 +84,7 @@ unittest(test_HW_constructors)
   assertEqual(0x00, mcp_hw0.getAddress());
   assertTrue(mcp_hw0.usesHWSPI());
   assertEqual(MCP23S17_OK, mcp_hw0.lastError());
-  
+
   for (int addr = 0; addr < 8; addr++)
   {
     MCP23S17 mcp_hw(10, addr);
@@ -93,8 +93,6 @@ unittest(test_HW_constructors)
 
   MCP23S17 mcp_hw1(10, &SPI);
   assertEqual(0x00, mcp_hw1.getAddress());
-  
-  fprintf(stderr, "\nHWSPI %d\n", mcp_hw1.usesHWSPI());
   assertTrue(mcp_hw1.usesHWSPI());
 
   for (int addr = 0; addr < 8; addr++)
@@ -158,7 +156,7 @@ unittest(test_Polarity)
 
 unittest(test_Pullup)
 {
-  bool flag; 
+  bool flag;
   MCP23S17 mcp_hw(10);
   assertEqual(MCP23S17_OK, mcp_hw.lastError());
 
