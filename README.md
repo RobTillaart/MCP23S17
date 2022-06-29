@@ -23,7 +23,7 @@ Programming Interface is kept the same as much as possible.
 
 ### Constructor
 
-- **MCP23S17(uint8_t select, uint8_t data, uint8_t clock, uint8_t address = 0x00)** constructor SW SPI.
+- **MCP23S17(uint8_t select, uint8_t dataIn, uint8_t dataOut, uint8_t clock, uint8_t address = 0x00)** constructor SW SPI.
 - **MCP23S17(uint8_t select, SPIClass\* spi)** constructor HW SPI with explicit SPI interface selected.
 - **MCP23S17(uint8_t select, uint8_t address = 0x00, SPIClass\* spi = &SPI)** constructor HW SPI with optional address pins and SPI interface.
 - **bool begin()** returns true if successful.
@@ -36,6 +36,7 @@ The above would allow to call 4 different constructors.
 - MCP23S17(10, 7, &SPI1);  // select pin + address pins + SPI port
 - MCP23S17(10, &SPI);      // select pin + SPI port
 ```
+
 
 #### sharing select lines
 
@@ -99,8 +100,12 @@ See examples.
 
 ## Future
 
+- improve documentation
+  - references to I2C ?
 - keep functional in sync with MCP23017_RT
-- **isConnected()** is not really needed
-- implement ESP32 specific support - see MCP_ADC.begin()
 - replace magic numbers with a defined constant
+- implement ESP32 specific support - see MCP_ADC.begin()
+  - note that the SW_SPI is roughly equal in performance as HW SPI on ESP32.
+- investigate and reimplement the INPUT_PULLUP for pinMode()
+
 

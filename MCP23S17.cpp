@@ -16,6 +16,7 @@
 //  0.2.0   2022-06-28  fix #10 incorrect mask
 //  0.2.1   2022-06-29  add SPIClass as parameter for constructor (See #10)
 //                      redo constructors.
+//                      add getAddress()
 //                      update readme.md
 
 
@@ -101,7 +102,7 @@ bool MCP23S17::begin()
 
   if (_hwSPI)
   {
-    // TODO - ESP32 specific support - see MCP_ADC.
+    //  TODO - ESP32 specific support - see MCP_ADC.
     // _mySPI = &SPI;  //  set in constructor  #10
     _mySPI->end();
     _mySPI->begin();
@@ -136,6 +137,12 @@ bool MCP23S17::isConnected()
 {
   _error = MCP23S17_OK;
   return true;
+}
+
+
+uint8_t MCP23S17::getAddress()
+{
+  return _address;
 }
 
 

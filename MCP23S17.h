@@ -34,7 +34,8 @@ public:
   MCP23S17(uint8_t select, uint8_t address = 0x00, SPIClass* spi = &SPI);
 
   bool     begin();
-  bool     isConnected();  // needed ?
+  bool     isConnected();
+  uint8_t  getAddress();   //  typically returns 0x00
 
 
   // single pin interface

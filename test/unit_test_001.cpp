@@ -58,9 +58,38 @@ unittest(test_constants)
 }
 
 
-unittest(test_constructor)
+unittest(test_SW_constructor)
 {
+  MCP23S17 mcp_sw(10, 11, 12, 13);  //  default address 0x00
+  assertEqual(0x00, mcp_sw.getAddress());
 
+  for (int addr = 0; addr < 8; addr++)
+  {
+    MCP23S17 mcp_sw(10, 11, 12, 13, addr);
+    assertEqual(addr, mcp_sw.getAddress());
+  }
+}
+
+
+unittest(test_HW_constructors)
+{
+  MCP23S17 mcp_hw0(10);
+  assertEqual(0x00, mcp_hw0.getAddress());
+
+  for (int addr = 0; addr < 8; addr++)
+  {
+    MCP23S17 mcp_hw(10, addr);
+    assertEqual(addr, mcp_hw.getAddress());
+  }
+
+  MCP23S17 mcp_hw1(10, &SPI);
+  assertEqual(0x00, mcp_hw0.getAddress());
+
+  for (int addr = 0; addr < 8; addr++)
+  {
+    MCP23S17 mcp_hw(10, addr, &SPI);
+    assertEqual(addr, mcp_hw.getAddress());
+  }
 }
 
 
