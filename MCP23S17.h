@@ -100,7 +100,7 @@ private:
   uint8_t  _clock   = 0;
   uint8_t  _error   = MCP23S17_OK;
 
-  bool        _hwSPI;
+  bool        _hwSPI = true;
   // 10 MHz is maximum, 8 is a better clock divider
   uint32_t    _SPIspeed = MCP23S17_TYP_SPI_SPEED;
   SPIClass *  _mySPI;
