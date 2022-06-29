@@ -95,9 +95,10 @@ private:
   uint8_t  _clock   = 0;
   uint8_t  _error   = MCP23S17_OK;
 
-  bool        _hwSPI = false;
-  uint32_t    _SPIspeed = 8000000UL;   // 1MHz is a safe value TODO CHECK datasheet
-  SPIClass    * _mySPI;
+  bool        _hwSPI;
+  // 10 MHz is maximum, 8 is a better clock divider
+  uint32_t    _SPIspeed = 8000000UL;
+  SPIClass *  _mySPI;
   SPISettings _spi_settings;
 
   uint8_t  swSPI_transfer(uint8_t val);
