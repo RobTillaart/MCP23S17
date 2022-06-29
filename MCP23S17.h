@@ -22,7 +22,7 @@
 #define MCP23S17_REGISTER_ERROR           0xFF
 
 
-#define MCP23S17_INVALID_READ             -100
+#define MCP23S17_INVALID_READ             0xFF
 
 
 class MCP23S17
