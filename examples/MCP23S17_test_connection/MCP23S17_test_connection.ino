@@ -3,16 +3,14 @@
 //  AUTHOR: Rob Tillaart
 //    DATE: 2022-06-28
 // PUPROSE: test MCP23017 library
-
+//
+// see issue #13 library
 
 #include "MCP23S17.h"
 #include "SPI.h"
 
-const uint16_t _connection_test_constant = 0xA3C5; 
-
 // MCP23S17 MCP(10, 12, 11, 13);  //  SW SPI address 0x00
 MCP23S17 MCP(10, 4);           //  HW SPI address 4
-
 
 void setup()
 {
