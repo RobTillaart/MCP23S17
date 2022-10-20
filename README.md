@@ -92,6 +92,26 @@ Returns true if successful.
 Returns true if successful.
 
 
+###  IO Control Register
+
+Since 0.2.3 the library supports setting bit fields in the IO control register.
+Read the datasheet carefully!
+
+- **void enableControlRegister(uint8_t mask)**
+- **void disableControlRegister(uint8_t mask)**
+
+
+|  constant              |  mask  |  description  |
+|:-----------------------|:------:|:--------------|
+|  MCP23S17_IOCR_BANK    |  0x80  | Controls how the registers are addressed.
+|  MCP23S17_IOCR_MIRROR  |  0x40  | INT Pins Mirror bit.
+|  MCP23S17_IOCR_SEQOP   |  0x20  | Sequential Operation mode bit.
+|  MCP23S17_IOCR_DISSLW  |  0x10  | Slew Rate control bit for SDA output.
+|  MCP23S17_IOCR_HAEN    |  0x08  | Hardware Address Enable bit (MCP23S17 only).
+|  MCP23S17_IOCR_ODR     |  0x04  | Configures the INT pin as an open-drain output.
+|  MCP23S17_IOCR_INTPOL  |  0x02  | This bit sets the polarity of the INT output pin.
+|  MCP23S17_IOCR_NI      |  0x01  | Not implemented. 
+
 ### Error codes
 
 If one of the above functions return false, there might be an error.
