@@ -12,7 +12,7 @@
 #include "MCP23S17.h"
 
 
-//  SW SPI
+//  SOFTWARE SPI
 MCP23S17::MCP23S17(uint8_t select, uint8_t dataIn, uint8_t dataOut, uint8_t clock, uint8_t address)
 {
   _address = (address << 1);
@@ -25,11 +25,12 @@ MCP23S17::MCP23S17(uint8_t select, uint8_t dataIn, uint8_t dataOut, uint8_t cloc
 }
 
 
-//  HW SPI
+//  HARDWARE SPI
 MCP23S17::MCP23S17(uint8_t select, SPIClass* spi)
 {
   MCP23S17(select, 0x00, spi);
 }
+
 
 MCP23S17::MCP23S17(uint8_t select, uint8_t address, SPIClass* spi)
 {
@@ -79,7 +80,7 @@ bool MCP23S17::begin()
 }
 
 
-//  to keep interface in sync with I2C MCP23017 library.
+//  just to keep interface in sync with I2C MCP23017 library.
 bool MCP23S17::isConnected()
 {
   _error = MCP23S17_OK;
@@ -93,7 +94,10 @@ uint8_t MCP23S17::getAddress()
 }
 
 
+///////////////////////////////////////////////////////////////////
+//
 //  single pin interface
+//
 //  pin  = 0..15
 //  mode = INPUT, OUTPUT, INPUT_PULLUP (= same as INPUT)
 bool MCP23S17::pinMode(uint8_t pin, uint8_t mode)
@@ -172,6 +176,7 @@ bool MCP23S17::digitalWrite(uint8_t pin, uint8_t value)
   {
     val &= ~mask;
   }
+  //  only write when changed.
   if (pre != val)
   {
     writeReg(IOR, val);
@@ -341,9 +346,10 @@ void MCP23S17::setSPIspeed(uint32_t speed)
 
 
 
-///////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
 //
 //  8 pins interface
+//
 //  whole register at once
 //  port  = 0..1
 //  value = 0..0xFF  bit pattern
@@ -461,9 +467,10 @@ bool MCP23S17::getPullup8(uint8_t port, uint8_t &mask)
 }
 
 
-///////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
 //
 //  16 pins interface
+//
 //  two register at once
 //  value = 0x0000..0xFFFF bit pattern
 bool MCP23S17::pinMode16(uint16_t value)

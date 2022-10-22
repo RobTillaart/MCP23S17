@@ -94,8 +94,11 @@ public:
 
 
 private:
+  //       access to low level registers (just make these two functions public).
+  //       USE WITH CARE !!!
   bool     writeReg(uint8_t reg, uint8_t value);
   uint8_t  readReg(uint8_t reg);
+
 
   uint8_t  _address = 0;
   uint8_t  _select  = 0;
@@ -104,8 +107,9 @@ private:
   uint8_t  _clock   = 0;
   uint8_t  _error   = MCP23S17_OK;
 
-  bool        _hwSPI = true;
-  //  10 MHz is maximum, 8 is a better clock divider
+  bool       _hwSPI = true;
+
+  //  10 MHz is maximum, 8 is a better clock divider on AVR.
   uint32_t    _SPIspeed = MCP23S17_TYP_SPI_SPEED;
   SPIClass *  _mySPI;
   SPISettings _spi_settings;

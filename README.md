@@ -136,9 +136,20 @@ See examples.
 
 ## Future
 
+#### must
+
 - improve documentation
-  - references to I2C ?
+  - references to I2C version?
+
+#### should
+
 - keep functional in sync with MCP23017_RT
+
+#### could 
+
+- check need for writing in all functions (Polarity / pullup)
+  - check if bit mask changes.
+  - what is performance gain vs footprint?
 - implement ESP32 specific support in begin()
   - see MCP_ADC.begin()
   - SW_SPI is roughly equal in performance as HW SPI on ESP32.
