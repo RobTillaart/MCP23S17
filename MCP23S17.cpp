@@ -1,7 +1,7 @@
 //
 //    FILE: MCP23S17.cpp
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.2.4
+// VERSION: 0.2.5
 // PURPOSE: Arduino library for SPI MCP23S17 16 channel port expander
 //    DATE: 2021-12-30
 //     URL: https://github.com/RobTillaart/MCP23S17
@@ -577,6 +577,18 @@ void MCP23S17::disableControlRegister(uint8_t mask)
   uint8_t reg = readReg(MCP23S17_IOCR);
   reg &= ~mask;
   writeReg(MCP23S17_IOCR, reg);
+}
+
+
+void MCP23S17::enableHardwareAddress()
+{
+  enableControlRegister(MCP23S17_IOCR_HAEN);
+}
+
+
+void MCP23S17::disableHardwareAddress()
+{
+  disableControlRegister(MCP23S17_IOCR_HAEN);
 }
 
 

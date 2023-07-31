@@ -61,12 +61,22 @@ The two hardware constructors allow to call 4 different constructors.
 ```
 
 
-#### sharing select lines
+#### Sharing SELECT lines
 
-(not tested)
-Technically two chips could use the same select pin and a different address. 
+(Not tested yet)
+Technically two chips could use the same SELECT pin and a different address. 
 The constructors would allow to setup such a configuration.
+The added value is that one can use multiple devices with only 4 lines (MISO, MOSI, CLOCK, SELECT).
+
 I assume that this is less used and IMHO not recommended.
+NB it is more difficult to detect which device is selected when debugging.
+
+See datasheet 3.3.2 ADDRESSING SPI DEVICES, need to set IOCON.HAEN.
+```cpp
+MCP.enableControlRegister(0x08);
+or
+MCP.enableHardwareAddress();  //  0.2.5 version and up
+```
 
 
 ### Single pin interface
@@ -133,6 +143,11 @@ Read the datasheet carefully!
 |  MCP23S17_IOCR_NI      |  0x01  |  Not implemented. 
 
 
+Two dedicated functions are added since 0.2.5
+- **void enableHardwareAddress()**
+- **void disableHardwareAddress()**
+
+
 ### Error codes
 
 If one of the above functions return false, there might be an error.
@@ -163,11 +178,20 @@ See examples.
 
 #### Should
 
+- buy additional hardware
 - keep functional in sync with MCP23017_RT
+- test with multiple devices.
+  - multi SELECT lines
+  - one SELECT line and multiple addresses.
+- add example with interrupts
+  - test 
+- IOCON.HAEN, Hardware Address ENable.
+  - no separate function but **MCP.enableControlRegister(0x08)**
+  - should this be enabled in **begin()** by default?  0.3.0?
 
 #### Could 
 
-- check need for writing in all functions (Polarity / pullup)
+- check need for writing in all functions (Polarity / Pull-up)
   - check if bit mask changes.
   - what is performance gain vs footprint?
 - implement ESP32 specific support in begin()

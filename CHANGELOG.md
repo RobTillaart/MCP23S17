@@ -6,11 +6,19 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## [0.2.5] - 2023-07-31
+- add example **MCP23S17_two_SELECT.ino** (#19)
+- add example **MCP23S17_two_ADDRESS.ino** (#19)
+- add **void enableHardwareAddress()** (#19)
+- add **void disableHardwareAddress()** (#19)
+- add keywords.txt (#20)
+- update readme.md
+
+
 ## [0.2.4] - 2023-02-04
 - update readme.md
 - update GitHub actions
 - update license 2023
-
 
 ## [0.2.3] - 2022-10-20
 - add CHANGELOG.md
