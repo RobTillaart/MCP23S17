@@ -97,15 +97,17 @@ public:
   void     disableHardwareAddress();
 
   //  ESP32 specific
-  #if defined(ESP32)
-  void     selectHSPI() { _useHSPI = true;  };
-  void     selectVSPI() { _useHSPI = false; };
-  bool     usesHSPI()   { return _useHSPI;  };
-  bool     usesVSPI()   { return !_useHSPI; };
+#if defined(ESP32)
 
-  //  to overrule ESP32 default hardware pins
+  void     selectHSPI();
+  void     selectVSPI();
+  bool     usesHSPI();
+  bool     usesVSPI();
+
+  // to overrule the ESP32s default hardware pins
   void     setGPIOpins(uint8_t clk, uint8_t miso, uint8_t mosi, uint8_t select);
-  #endif
+
+#endif
 
 
 private:

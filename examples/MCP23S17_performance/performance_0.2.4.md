@@ -23,3 +23,6 @@ Max clock frequency 10 MHz, ESP32 WROVER Module
 
 For this test I used the ESP32 WROVER Module (ESP32-WROVER-IE-N16R8), ESP32-DEVKITS-R and MCP23S17T-E/ML (28QFN)
 Software SPI : D2, D4 and D5
+
+See: https://github.com/RobTillaart/MCP23S17/pull/22
+

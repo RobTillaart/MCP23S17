@@ -27,7 +27,6 @@ getPolarity8	KEYWORD2
 setPullup8	KEYWORD2
 getPullup8	KEYWORD2
 
-
 pinMode16	KEYWORD2
 write16	KEYWORD2
 read16	KEYWORD2
@@ -46,6 +45,12 @@ enableControlRegister	KEYWORD2
 disableControlRegister	KEYWORD2
 enableHardwareAddress	KEYWORD2
 disableHardwareAddress	KEYWORD2
+
+selectHSPI	KEYWORD2
+selectVSPI	KEYWORD2
+usesHSPI	KEYWORD2
+usesVSPI	KEYWORD2
+setGPIOpins	KEYWORD2
 
 
 # Instances (KEYWORD2)

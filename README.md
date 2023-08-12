@@ -122,7 +122,7 @@ Returns true if successful.
 Returns true if successful.
 
 
-###  IO Control Register
+### IO Control Register
 
 Since 0.2.3 the library supports setting bit fields in the IO control register.
 Read the datasheet carefully!
@@ -143,9 +143,42 @@ Read the datasheet carefully!
 |  MCP23S17_IOCR_NI      |  0x01  |  Not implemented. 
 
 
-Two dedicated functions are added since 0.2.5
-- **void enableHardwareAddress()**
-- **void disableHardwareAddress()**
+Two dedicated functions are added since 0.2.5.
+
+- **void enableHardwareAddress()** set IOCR_HAEN  bit.
+- **void disableHardwareAddress()** clear IOCR_HAEN bit.
+
+
+### ESP32 HW SPI port selection
+
+This functionality is new in 0.2.5.
+
+- **void selectHSPI()** in case hardware SPI, the ESP32 has two options HSPI and VSPI.
+- **void selectVSPI()** see above.
+- **bool usesHSPI()** returns true if HSPI is used.
+- **bool usesVSPI()** returns true if VSPI is used.
+
+The **selectVSPI()** or the **selectHSPI()** needs to be called
+BEFORE the **begin()** function.
+
+
+#### Experimental
+
+- **void setGPIOpins(uint8_t clk, uint8_t miso, uint8_t mosi, uint8_t select)** 
+overrule GPIO pins of ESP32 for hardware SPI. 
+Needs to be called AFTER the **begin()** function.
+
+```cpp
+void setup()
+{
+  MCP.selectVSPI();
+  MCP.begin(15);
+  MCP.setGPIOpins(CLK, MISO, MOSI, SELECT);  // SELECT should match the param of begin()
+}
+```
+
+This interface can change in the future as the **select** pin is known
+in the code.
 
 
 ### Error codes
@@ -194,10 +227,10 @@ See examples.
 - check need for writing in all functions (Polarity / Pull-up)
   - check if bit mask changes.
   - what is performance gain vs footprint?
-- implement ESP32 specific support in begin()
-  - see MCP_ADC.begin()
-  - SW_SPI is roughly equal in performance as HW SPI on ESP32.
 - investigate and reimplement the INPUT_PULLUP for pinMode() ?
+- RP2040 support for SPI, setGPIOpins() etc
+  - See MCP_DAC
+
 
 #### Wont
 
