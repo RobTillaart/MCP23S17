@@ -50,9 +50,24 @@ bool MCP23S17::begin()
 
   if (_hwSPI)
   {
-    //  _mySPI = &SPI;  //  set in constructor  #10
+    #if defined(ESP32)
+    if (_useHSPI)      //  HSPI
+    {
+      _mySPI = new SPIClass(HSPI);
+      _mySPI->end();
+      _mySPI->begin(14, 12, 13, _select);   //  CLK=14  MISO=12  MOSI=13
+    }
+    else               //  VSPI
+    {
+      _mySPI = new SPIClass(VSPI);
+      _mySPI->end();
+      _mySPI->begin(18, 19, 23, _select);   //  CLK=18  MISO=19  MOSI=23
+    }
+    #else              //  generic hardware SPI
+    _mySPI = &SPI;
     _mySPI->end();
     _mySPI->begin();
+    #endif
   }
   else
   {
