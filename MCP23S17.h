@@ -96,6 +96,17 @@ public:
   void     enableHardwareAddress();
   void     disableHardwareAddress();
 
+  //  ESP32 specific
+  #if defined(ESP32)
+  void     selectHSPI() { _useHSPI = true;  };
+  void     selectVSPI() { _useHSPI = false; };
+  bool     usesHSPI()   { return _useHSPI;  };
+  bool     usesVSPI()   { return !_useHSPI; };
+
+  //  to overrule ESP32 default hardware pins
+  void     setGPIOpins(uint8_t clk, uint8_t miso, uint8_t mosi, uint8_t select);
+  #endif
+
 
 private:
   //       access to low level registers (just make these two functions public).
@@ -119,6 +130,10 @@ private:
   SPISettings _spi_settings;
 
   uint8_t  swSPI_transfer(uint8_t val);
+
+  #if defined(ESP32)
+  bool        _useHSPI = true;
+  #endif
 };
 
 
