@@ -1,7 +1,7 @@
 //
 //    FILE: MCP23S17_two_ADDRESS.ino
 //  AUTHOR: Rob Tillaart
-// PUPROSE: demo two MCP23S17 devices
+// PURPOSE: demo two MCP23S17 devices
 //     URL: https://github.com/RobTillaart/MCP23S17
 //
 // #19, experimental, not tested wirth hardware yet

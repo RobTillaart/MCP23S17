@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - add **void disableHardwareAddress()** (#19)
 - add keywords.txt (#20)
 - update readme.md
+- minor edits
 
 
 ## [0.2.4] - 2023-02-04

@@ -1,7 +1,7 @@
 //
 //    FILE: MCP23S17_test.ino
 //  AUTHOR: Rob Tillaart
-// PUPROSE: test MCP23S17 library
+// PURPOSE: test MCP23S17 library
 //     URL: https://github.com/RobTillaart/MCP23S17
 
 
