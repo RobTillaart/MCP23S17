@@ -63,20 +63,26 @@ The two hardware constructors allow to call 4 different constructors.
 
 #### Sharing SELECT lines
 
-(Not tested yet)
+(verified in #19)  
 Technically two chips could use the same SELECT pin and a different address. 
-The constructors would allow to setup such a configuration.
-The added value is that one can use multiple devices with only 4 lines (MISO, MOSI, CLOCK, SELECT).
+Since 0.2.5 the constructors allow to setup such a configuration.
+The added value is that one can use up to 8 devices (= 128 IO lines) with only 
+four lines (MISO, MOSI, CLOCK, SELECT).
 
-I assume that this is less used and IMHO not recommended.
+I assume that this configuration is less used and IMHO not recommended.
 NB it is more difficult to detect which device is selected when debugging.
 
+To use the hardware addresses the Hardware Address ENable register must be set.
 See datasheet 3.3.2 ADDRESSING SPI DEVICES, need to set IOCON.HAEN.
+
+The library supports two ways:
 ```cpp
-MCP.enableControlRegister(0x08);
+MCP.enableControlRegister(MCP23S17_IOCR_HAEN);  //  or 0x08
 or
 MCP.enableHardwareAddress();  //  0.2.5 version and up
 ```
+
+See also **IO Control Register** section below.
 
 
 ### Single pin interface
@@ -215,12 +221,11 @@ See examples.
 - keep functional in sync with MCP23017_RT
 - test with multiple devices.
   - multi SELECT lines
-  - one SELECT line and multiple addresses.
 - add example with interrupts
   - test 
 - IOCON.HAEN, Hardware Address ENable.
-  - no separate function but **MCP.enableControlRegister(0x08)**
-  - should this be enabled in **begin()** by default?  0.3.0?
+  - should this be enabled in **begin()** by default?  0.3.0
+  - check address range in constructor.
 
 #### Could 
 
@@ -230,10 +235,9 @@ See examples.
 - investigate and reimplement the INPUT_PULLUP for pinMode() ?
 - RP2040 support for SPI, setGPIOpins() etc
   - See MCP_DAC
-
+- AVR software SPI optimize 0.3.0
+  - dao and clock - see fastShiftOut.
 
 #### Wont
-
-- check address range in constructor.
 
 
