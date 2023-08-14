@@ -42,6 +42,8 @@ public:
   bool     begin();
   bool     isConnected();
   uint8_t  getAddress();   //  default returns 0x00
+  void     beginSpiTransaction();
+  void     endSpiTransaction();
 
 
   //  single pin interface
@@ -114,8 +116,9 @@ private:
   //       access to low level registers (just make these two functions public).
   //       USE WITH CARE !!!
   bool     writeReg(uint8_t reg, uint8_t value);
+  bool     writeReg16(uint8_t reg, uint8_t value);
   uint8_t  readReg(uint8_t reg);
-
+  uint8_t  readReg16(uint8_t reg);
 
   uint8_t  _address = 0;
   uint8_t  _select  = 0;

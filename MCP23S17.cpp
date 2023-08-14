@@ -108,6 +108,22 @@ uint8_t MCP23S17::getAddress()
 }
 
 
+// begin the SPI transaction only if this is the hardware SPI
+void MCP23S17::beginSpiTransaction() {
+  if (_hwSPI) {
+    _mySPI->beginTransaction(_spi_settings);
+  }
+}
+
+
+// end the SPI transaction only if this is the hardware SPI
+void MCP23S17::endSpiTransaction() {
+  if (_hwSPI) {
+    _mySPI->endTransaction();
+  }
+}
+
+
 ///////////////////////////////////////////////////////////////////
 //
 //  single pin interface
@@ -489,8 +505,10 @@ bool MCP23S17::getPullup8(uint8_t port, uint8_t &mask)
 //  value = 0x0000..0xFFFF bit pattern
 bool MCP23S17::pinMode16(uint16_t value)
 {
-  writeReg(MCP23S17_DDR_A, value >> 8);
-  writeReg(MCP23S17_DDR_B, value & 0xFF);
+  MCP23S17::beginSpiTransaction();
+  writeReg16(MCP23S17_DDR_A, value >> 8);
+  writeReg16(MCP23S17_DDR_B, value & 0xFF);
+  MCP23S17::endSpiTransaction();
   _error = MCP23S17_OK;
   return true;
 }
@@ -499,8 +517,10 @@ bool MCP23S17::pinMode16(uint16_t value)
 //  value = 0x0000..0xFFFF   bit pattern
 bool MCP23S17::write16(uint16_t value)
 {
-  writeReg(MCP23S17_GPIO_A, value >> 8);
-  writeReg(MCP23S17_GPIO_B, value & 0xFF);
+  MCP23S17::beginSpiTransaction();
+  writeReg16(MCP23S17_GPIO_A, value >> 8);
+  writeReg16(MCP23S17_GPIO_B, value & 0xFF);
+  MCP23S17::endSpiTransaction();
   _error = MCP23S17_OK;
   return true;
 }
@@ -509,10 +529,12 @@ bool MCP23S17::write16(uint16_t value)
 //  return = 0x0000..0xFFFF  bit pattern
 uint16_t MCP23S17::read16()
 {
+  MCP23S17::beginSpiTransaction();
   _error = MCP23S17_OK;
-  uint16_t value = readReg(MCP23S17_GPIO_A);
+  uint16_t value = readReg16(MCP23S17_GPIO_A);
   value <<= 8;
-  value += readReg(MCP23S17_GPIO_B);
+  value += readReg16(MCP23S17_GPIO_B);
+  MCP23S17::endSpiTransaction();
   return value;
 }
 
@@ -520,8 +542,10 @@ uint16_t MCP23S17::read16()
 //  mask = 0x0000..0xFFFF  bit pattern
 bool MCP23S17::setPolarity16(uint16_t mask)
 {
-  writeReg(MCP23S17_POL_A, mask >> 8);
-  writeReg(MCP23S17_POL_B, mask & 0xFF);
+  MCP23S17::beginSpiTransaction();
+  writeReg16(MCP23S17_POL_A, mask >> 8);
+  writeReg16(MCP23S17_POL_B, mask & 0xFF);
+  MCP23S17::endSpiTransaction();
   if (_error != MCP23S17_OK)
   {
     return false;
@@ -533,9 +557,11 @@ bool MCP23S17::setPolarity16(uint16_t mask)
 //  mask = 0x0000..0xFFFF  bit pattern
 bool MCP23S17::getPolarity16(uint16_t &mask)
 {
-  mask = readReg(MCP23S17_POL_A);
+  MCP23S17::beginSpiTransaction();
+  mask = readReg16(MCP23S17_POL_A);
   mask <<= 8;
-  mask += readReg(MCP23S17_POL_B);
+  mask += readReg16(MCP23S17_POL_B);
+  MCP23S17::endSpiTransaction();
   if (_error != MCP23S17_OK)
   {
     return false;
@@ -547,8 +573,10 @@ bool MCP23S17::getPolarity16(uint16_t &mask)
 //  mask = 0x0000..0xFFFF  bit pattern
 bool MCP23S17::setPullup16(uint16_t mask)
 {
-  writeReg(MCP23S17_PUR_A, mask >> 8);
-  writeReg(MCP23S17_PUR_B, mask & 0xFF);
+  MCP23S17::beginSpiTransaction();
+  writeReg16(MCP23S17_PUR_A, mask >> 8);
+  writeReg16(MCP23S17_PUR_B, mask & 0xFF);
+  MCP23S17::endSpiTransaction();
   if (_error != MCP23S17_OK)
   {
     return false;
@@ -560,9 +588,11 @@ bool MCP23S17::setPullup16(uint16_t mask)
 //  mask = 0x0000..0xFFFF  bit pattern
 bool MCP23S17::getPullup16(uint16_t &mask)
 {
-  mask = readReg(MCP23S17_PUR_A);
+  MCP23S17::beginSpiTransaction();
+  mask = readReg16(MCP23S17_PUR_A);
   mask <<= 8;
-  mask += readReg(MCP23S17_PUR_B);
+  mask += readReg16(MCP23S17_PUR_B);
+  MCP23S17::endSpiTransaction();
   if (_error != MCP23S17_OK)
   {
     return false;
@@ -693,6 +723,35 @@ bool MCP23S17::writeReg(uint8_t reg, uint8_t value)
 }
 
 
+bool MCP23S17::writeReg16(uint8_t reg, uint8_t value)
+{
+  _error = MCP23S17_OK;
+
+  if (reg > MCP23S17_OLAT_B)
+  {
+    _error = MCP23S17_REGISTER_ERROR;
+    return false;
+  }
+  ::digitalWrite(_select, LOW);
+  if (_hwSPI)
+  {
+    //  _address already shifted
+    _mySPI->transfer(MCP23S17_WRITE_REG | _address );
+    _mySPI->transfer(reg);
+    _mySPI->transfer(value);
+  }
+  else
+  {
+    //  _address already shifted
+    swSPI_transfer(MCP23S17_WRITE_REG | _address );
+    swSPI_transfer(reg);
+    swSPI_transfer(value);
+  }
+  ::digitalWrite(_select, HIGH);
+  return true;
+}
+
+
 uint8_t MCP23S17::readReg(uint8_t reg)
 {
   uint8_t rv = 0;
@@ -714,6 +773,38 @@ uint8_t MCP23S17::readReg(uint8_t reg)
     _mySPI->transfer(reg);
     rv = _mySPI->transfer(0xFF);
     _mySPI->endTransaction();
+  }
+  else
+  {
+    //  _address already shifted
+    swSPI_transfer(MCP23S17_READ_REG | _address );
+    swSPI_transfer(reg);
+    rv = swSPI_transfer(0xFF);
+  }
+  ::digitalWrite(_select, HIGH);
+  return rv;
+}
+
+
+uint8_t MCP23S17::readReg16(uint8_t reg)
+{
+  uint8_t rv = 0;
+
+  _error = MCP23S17_OK;
+
+  if (reg > MCP23S17_OLAT_B)
+  {
+    _error = MCP23S17_REGISTER_ERROR;
+    return false;
+  }
+
+  ::digitalWrite(_select, LOW);
+  if (_hwSPI)
+  {
+    //  _address already shifted
+    _mySPI->transfer(MCP23S17_READ_REG | _address );
+    _mySPI->transfer(reg);
+    rv = _mySPI->transfer(0xFF);
   }
   else
   {
