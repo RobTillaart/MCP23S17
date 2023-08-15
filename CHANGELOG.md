@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [0.2.6] - 2023-08-15
 - optimize 16 bit interface
   - add readReg16() + writeReg16()
+  - based upon ideas from Alex Uta (PR #23)
 - update performance test sketch (multi speeds in one run)
 - update readme.md
 - minor edits
