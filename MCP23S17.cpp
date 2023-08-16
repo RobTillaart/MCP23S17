@@ -489,8 +489,6 @@ bool MCP23S17::getPullup8(uint8_t port, uint8_t &mask)
 bool MCP23S17::pinMode16(uint16_t value)
 {
   writeReg16(MCP23S17_DDR_A, value);
-  // writeReg(MCP23S17_DDR_A, value >> 8);
-  // writeReg(MCP23S17_DDR_B, value & 0xFF);
   _error = MCP23S17_OK;
   return true;
 }
@@ -500,8 +498,6 @@ bool MCP23S17::pinMode16(uint16_t value)
 bool MCP23S17::write16(uint16_t value)
 {
   writeReg16(MCP23S17_GPIO_A, value);
-  // writeReg(MCP23S17_GPIO_A, value >> 8);
-  // writeReg(MCP23S17_GPIO_B, value & 0xFF);
   _error = MCP23S17_OK;
   return true;
 }
@@ -512,9 +508,6 @@ uint16_t MCP23S17::read16()
 {
   _error = MCP23S17_OK;
   uint16_t value = readReg16(MCP23S17_GPIO_A);
-  // uint16_t value = readReg(MCP23S17_GPIO_A);
-  // value <<= 8;
-  // value += readReg(MCP23S17_GPIO_B);
   return value;
 }
 
@@ -523,8 +516,6 @@ uint16_t MCP23S17::read16()
 bool MCP23S17::setPolarity16(uint16_t mask)
 {
   writeReg16(MCP23S17_POL_A, mask);
-  // writeReg(MCP23S17_POL_A, mask >> 8);
-  // writeReg(MCP23S17_POL_B, mask & 0xFF);
   if (_error != MCP23S17_OK)
   {
     return false;
@@ -537,9 +528,6 @@ bool MCP23S17::setPolarity16(uint16_t mask)
 bool MCP23S17::getPolarity16(uint16_t &mask)
 {
   mask = readReg16(MCP23S17_POL_A);
-  // mask = readReg(MCP23S17_POL_A);
-  // mask <<= 8;
-  // mask += readReg(MCP23S17_POL_B);
   if (_error != MCP23S17_OK)
   {
     return false;
@@ -552,8 +540,6 @@ bool MCP23S17::getPolarity16(uint16_t &mask)
 bool MCP23S17::setPullup16(uint16_t mask)
 {
   writeReg16(MCP23S17_PUR_A, mask);
-  // writeReg(MCP23S17_PUR_A, mask >> 8);
-  // writeReg(MCP23S17_PUR_B, mask & 0xFF);
   if (_error != MCP23S17_OK)
   {
     return false;
@@ -566,9 +552,6 @@ bool MCP23S17::setPullup16(uint16_t mask)
 bool MCP23S17::getPullup16(uint16_t &mask)
 {
   mask = readReg16(MCP23S17_PUR_A);
-  // mask = readReg(MCP23S17_PUR_A);
-  // mask <<= 8;
-  // mask += readReg(MCP23S17_PUR_B);
   if (_error != MCP23S17_OK)
   {
     return false;
@@ -731,6 +714,7 @@ uint8_t MCP23S17::readReg(uint8_t reg)
   ::digitalWrite(_select, HIGH);
   return rv;
 }
+
 
 //  writes HIGH byte first, LOW byte last
 bool MCP23S17::writeReg16(uint8_t reg, uint16_t value)
