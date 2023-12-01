@@ -24,13 +24,13 @@ MCP23S17::MCP23S17(uint8_t select, uint8_t dataIn, uint8_t dataOut, uint8_t cloc
 
 
 //  HARDWARE SPI
-MCP23S17::MCP23S17(uint8_t select, SPIClass* spi)
+MCP23S17::MCP23S17(uint8_t select, __SPI_CLASS__ * spi)
 {
   MCP23S17(select, 0x00, spi);
 }
 
 
-MCP23S17::MCP23S17(uint8_t select, uint8_t address, SPIClass* spi)
+MCP23S17::MCP23S17(uint8_t select, uint8_t address, __SPI_CLASS__ * spi)
 {
   _address = (address << 1);
   _select  = select;
