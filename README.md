@@ -171,25 +171,6 @@ Two dedicated functions are added since 0.2.5.
 - **void disableHardwareAddress()** clear IOCR_HAEN bit.
 
 
-#### Experimental
-
-- **void setGPIOpins(uint8_t clk, uint8_t miso, uint8_t mosi, uint8_t select)** 
-overrule GPIO pins of ESP32 for hardware SPI. 
-Needs to be called AFTER the **begin()** function.
-
-```cpp
-void setup()
-{
-  MCP.selectVSPI();
-  MCP.begin(15);
-  MCP.setGPIOpins(CLK, MISO, MOSI, SELECT);  // SELECT should match the param of begin()
-}
-```
-
-This interface can change in the future as the **select** pin is known
-in the code.
-
-
 ### Error codes
 
 If one of the above functions return false, there might be an error.
