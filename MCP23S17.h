@@ -44,7 +44,7 @@ public:
   MCP23S17(uint8_t select, uint8_t dataIn, uint8_t dataOut, uint8_t clock, uint8_t address = 0x00);
   //  HARDWARE SPI
   MCP23S17(int select, __SPI_CLASS__ * spi);
-  MCP23S17(int select, int address, __SPI_CLASS__ * spi = &SPI);
+  MCP23S17(int select, int address = 0x00, __SPI_CLASS__ * spi = &SPI);
 
   bool     begin(bool pullup = true);
   bool     isConnected();
