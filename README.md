@@ -84,10 +84,10 @@ Also it makes the library a bit simpler to maintain.
 ### Constructor
 
 - **MCP23S17(uint8_t select, uint8_t dataIn, uint8_t dataOut, uint8_t clock, uint8_t address = 0x00)** constructor SOFTWARE SPI.
-- **MCP23S17(uint8_t select, SPIClassRP2040\* spi)** constructor HARDWARE SPI with explicit SPI interface selected.
-- **MCP23S17(uint8_t select, SPIClass\* spi)** constructor HARDWARE SPI with explicit SPI interface selected.
-- **MCP23S17(uint8_t select, uint8_t address = 0x00, SPIClassRP2040\* spi = &SPI)** constructor HARDWARE SPI with optional address pins and SPI interface.
-- **MCP23S17(uint8_t select, uint8_t address = 0x00, SPIClass\* spi = &SPI)** constructor HARDWARE SPI with optional address pins and SPI interface.
+- **MCP23S17(int select, SPIClassRP2040\* spi)** constructor HARDWARE SPI with explicit SPI interface selected.
+- **MCP23S17(int select, SPIClass\* spi)** constructor HARDWARE SPI with explicit SPI interface selected.
+- **MCP23S17(int select, int address = 0x00, SPIClassRP2040\* spi = &SPI)** constructor HARDWARE SPI with optional address pins and SPI interface.
+- **MCP23S17(int select, int address = 0x00, SPIClass\* spi = &SPI)** constructor HARDWARE SPI with optional address pins and SPI interface.
 - **bool begin(bool pullup = true)** initializes library, returns true if successful. 
 Default sets the pins to INPUT PULLUP.
 Returns false if not connected or a register could not be set.
