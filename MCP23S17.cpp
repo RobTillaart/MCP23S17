@@ -547,6 +547,136 @@ bool MCP23S17::getPullup16(uint16_t &mask)
 }
 
 
+///////////////////////////////////////////////////
+//
+//  INTERRUPTS (experimental, see #40)
+//
+//  TODO, catch writeReg errors
+//  TODO, MCP23S17_INT_MODE_ERROR?
+//  TODO, if register not changed no need to update?
+//  TODO, 8 bits optimize? more code vs speed?
+//
+//  pin = 0..15, mode = { RISING, FALLING, CHANGE }
+bool MCP23S17::enableInterrupt(uint8_t pin, uint8_t mode)
+{
+  if (pin > 15)
+  {
+    _error = MCP23S17_PIN_ERROR;
+    return false;
+  }
+
+  //  right mode
+  uint16_t intcon = readReg16(MCP23S17_INTCON_A);
+  if (mode == CHANGE)
+  {
+    //  compare to previous value.
+    intcon &= ~(1 << pin);
+  }
+  else
+  {
+    uint16_t defval = readReg16(MCP23S17_DEFVAL_A);
+    if (mode == RISING)
+    {
+      intcon |= (1 << pin);
+      defval &= ~(1 << pin);  //  RISING == compare to 0
+    }
+    else if (mode == FALLING)
+    {
+      intcon |= (1 << pin);
+      defval |= ~(1 << pin);  //  FALLING == compare to 1
+    }
+    writeReg16(MCP23S17_DEFVAL_A, defval);
+  }
+  writeReg16(MCP23S17_INTCON_A, intcon);
+
+  //  enable interrupt
+  uint16_t value = readReg16(MCP23S17_GPINTEN_A);
+  value |= (1 << pin);
+  return writeReg16(MCP23S17_GPINTEN_A, value);
+}
+
+
+bool MCP23S17::disableInterrupt(uint8_t pin)
+{
+  if (pin > 15)
+  {
+    _error = MCP23S17_PIN_ERROR;
+    return false;
+  }
+  //  disable interrupt
+  uint16_t value = readReg16(MCP23S17_GPINTEN_A);
+  value &= ~(1 << pin);
+  return writeReg16(MCP23S17_GPINTEN_A, value);
+}
+
+
+bool MCP23S17::enableInterrupt16(uint16_t mask, uint8_t mode)
+{
+  uint16_t intcon = 0, defval = 0;
+  //  right mode
+  if (mode == CHANGE)
+  {
+    //  compare to previous value.
+    intcon = ~mask;
+  }
+  else
+  {
+    if (mode == RISING)
+    {
+      intcon = mask;
+      defval = ~mask;  //  RISING == compare to 0
+    }
+    else if (mode == FALLING)
+    {
+      intcon = mask;
+      defval = ~mask;  //  FALLING == compare to 1
+    }
+    writeReg16(MCP23S17_DEFVAL_A, defval);
+  }
+  writeReg16(MCP23S17_INTCON_A, intcon);
+  
+  //  enable the mask
+  writeReg16(MCP23S17_GPINTEN_A, mask);
+  return true;
+}
+
+
+bool MCP23S17::disableInterrupt16(uint16_t mask)
+{
+  return writeReg16(MCP23S17_GPINTEN_A, ~mask);
+}
+
+
+//  which pins caused the INT?
+uint16_t MCP23S17::getInterruptFlagRegister()
+{
+  return readReg(MCP23S17_INTF_A);
+}
+
+
+uint16_t MCP23S17::getInterruptCaptureRegister()
+{
+  return readReg(MCP23S17_INTCAP_A);
+}
+
+
+bool MCP23S17::mirrorInterrupts(bool on)
+{
+  if (on) return enableControlRegister(MCP23S17_IOCR_MIRROR);
+  return disableControlRegister(MCP23S17_IOCR_MIRROR);
+}
+
+
+bool MCP23S17::isMirroredInterrupts()
+{
+  return (readReg(MCP23S17_IOCR) & MCP23S17_IOCR_MIRROR) > 0;
+}
+
+
+/////////////////////////////////////////////
+//
+//  MISC
+//
 int MCP23S17::lastError()
 {
   int e = _error;
@@ -555,31 +685,31 @@ int MCP23S17::lastError()
 }
 
 
-void MCP23S17::enableControlRegister(uint8_t mask)
+bool MCP23S17::enableControlRegister(uint8_t mask)
 {
   uint8_t reg = readReg(MCP23S17_IOCR);
   reg |= mask;
-  writeReg(MCP23S17_IOCR, reg);
+  return writeReg(MCP23S17_IOCR, reg);
 }
 
 
-void MCP23S17::disableControlRegister(uint8_t mask)
+bool MCP23S17::disableControlRegister(uint8_t mask)
 {
   uint8_t reg = readReg(MCP23S17_IOCR);
   reg &= ~mask;
-  writeReg(MCP23S17_IOCR, reg);
+  return writeReg(MCP23S17_IOCR, reg);
 }
 
 
-void MCP23S17::enableHardwareAddress()
+bool MCP23S17::enableHardwareAddress()
 {
-  enableControlRegister(MCP23S17_IOCR_HAEN);
+  return enableControlRegister(MCP23S17_IOCR_HAEN);
 }
 
 
-void MCP23S17::disableHardwareAddress()
+bool MCP23S17::disableHardwareAddress()
 {
-  disableControlRegister(MCP23S17_IOCR_HAEN);
+  return disableControlRegister(MCP23S17_IOCR_HAEN);
 }
 
 

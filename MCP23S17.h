@@ -88,6 +88,25 @@ public:
   bool     getPullup16(uint16_t &mask);
 
 
+  //       INTERRUPTS (experimental)
+  //       pin = 0..15, mode = { RISING, FALLING, CHANGE }
+  bool     enableInterrupt(uint8_t pin, uint8_t mode);
+  bool     disableInterrupt(uint8_t pin);
+  
+  //       mask = 0x0000..0xFFFF  (overrides all earlier settings.
+  bool     enableInterrupt16(uint16_t mask, uint8_t mode);
+  bool     disableInterrupt16(uint16_t mask);
+
+  //       which pins caused the INT?
+  uint16_t getInterruptFlagRegister();
+  uint16_t getInterruptCaptureRegister();
+
+  //       merge INTA and INTB
+  bool     mirrorInterrupts(bool on);
+  bool     isMirroredInterrupts();
+
+
+  //       SPI
   //       speed in Hz
   void     setSPIspeed(uint32_t speed);
   uint32_t getSPIspeed() { return _SPIspeed; };
@@ -97,11 +116,11 @@ public:
   int      lastError();
 
   //       set/clear IOCR bit fields  (0.2.3 experimental)
-  void     enableControlRegister(uint8_t mask);
-  void     disableControlRegister(uint8_t mask);
+  bool     enableControlRegister(uint8_t mask);
+  bool     disableControlRegister(uint8_t mask);
   //       0.2.5 experimental
-  void     enableHardwareAddress();
-  void     disableHardwareAddress();
+  bool     enableHardwareAddress();
+  bool     disableHardwareAddress();
 
 
 private:

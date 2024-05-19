@@ -175,13 +175,48 @@ Since 0.2.6 the reading and writing to registers have been performance optimized
 If there are problems please open an issue.
 
 
+### Interrupts (experimental 0.5.2)
+
+Read the datasheet for the details, page 24,25.  
+Note: Error handling is limited.
+
+pin = 0..15  
+mode = { RISING, FALLING, CHANGE }  
+- **bool enableInterrupt(uint8_t pin, uint8_t mode)** 
+Returns true if successful.
+Returns MCP23S17_PIN_ERROR if pin > 15.
+- **bool disableInterrupt(uint8_t pin)**
+Returns true if successful.
+Returns MCP23S17_PIN_ERROR if pin > 15.
+
+
+16 pin interface, overrides all earlier settings. 
+Sets all pins to the same interrupt mode { RISING, FALLING, CHANGE }.
+- **bool enableInterrupt16(uint16_t mask, uint8_t mode)** mask = 0x0000..0xFFFF.
+- **bool disableInterrupt16(uint16_t mask)**
+
+
+Determine which pins caused the Interrupt. (datasheet).
+- **uint16_t getInterruptFlagRegister()** Reads all 16 pins.
+- **uint16_t getInterruptCaptureRegister()** Reads all 16 pins.
+Is used to detect if multiple pins triggered an interrupt.
+
+
+Merge INTA and INTB into one signal so only one line handles all interrupts.
+This reduces the number of interrupt lines to handle, however one has 
+to read more registers to find the changed ones.
+
+- **bool mirrorInterrupts(bool on)** enables / disables mirror mode.
+- **bool isMirroredInterrupts()** returns set option.
+
+
 ### IO Control Register
 
 Since 0.2.3 the library supports setting bit fields in the IO control register.
 Read the datasheet carefully!
 
-- **void enableControlRegister(uint8_t mask)**
-- **void disableControlRegister(uint8_t mask)**
+- **bool enableControlRegister(uint8_t mask)**
+- **bool disableControlRegister(uint8_t mask)**
 
 
 |  constant              |  mask  |  description  |
@@ -198,8 +233,8 @@ Read the datasheet carefully!
 
 Two dedicated functions are added since 0.2.5.
 
-- **void enableHardwareAddress()** set IOCR_HAEN  bit.
-- **void disableHardwareAddress()** clear IOCR_HAEN bit.
+- **bool enableHardwareAddress()** set IOCR_HAEN  bit.
+- **bool disableHardwareAddress()** clear IOCR_HAEN bit.
 
 
 ### Error codes
@@ -241,6 +276,10 @@ See examples.
 - IOCON.HAEN, Hardware Address ENable.
   - should this be enabled in **begin()** by default?  0.3.0
   - check address range in constructor.
+- enhance INTERRUPTS, IOCON.ODR and IOCON.INTPOL to set polarity.
+  - **bool setInterruptPolarity(polarity)** + getter
+      HIGH LOW Open Drain?
+- fix TODO's in code
 
 #### Could 
 
@@ -248,8 +287,6 @@ See examples.
   - check if bit mask changes.
   - what is performance gain vs footprint?
 - investigate and reimplement the INPUT_PULLUP for pinMode() ?
-- RP2040 support for SPI, setGPIOpins() etc
-  - See MCP_DAC
 - AVR software SPI optimize
   - dao and clock - see fastShiftOut.
 
