@@ -634,7 +634,7 @@ bool MCP23S17::enableInterrupt16(uint16_t mask, uint8_t mode)
     writeReg16(MCP23S17_DEFVAL_A, defval);
   }
   writeReg16(MCP23S17_INTCON_A, intcon);
-  
+
   //  enable the mask
   writeReg16(MCP23S17_GPINTEN_A, mask);
   return true;
@@ -657,6 +657,27 @@ uint16_t MCP23S17::getInterruptFlagRegister()
 uint16_t MCP23S17::getInterruptCaptureRegister()
 {
   return readReg(MCP23S17_INTCAP_A);
+}
+
+  //       polarity: 0 = LOW, 1 = HIGH, 2 = NONE/ODR
+bool MCP23S17::setInterruptPolarity(uint8_t polarity)
+{
+  if (polarity > 2) return false;
+  uint8_t reg = readReg(MCP23S17_IOCR);
+  reg &= ~(MCP23S17_IOCR_ODR | MCP23S17_IOCR_INTPOL);
+  //  LOW is default set.
+  if (polarity == 2) reg |= MCP23S17_IOCR_ODR;
+  if (polarity == 1) reg |= MCP23S17_IOCR_INTPOL;
+  return writeReg(MCP23S17_IOCR, reg);
+}
+
+
+uint8_t MCP23S17::getInterruptPolarity()
+{
+  uint8_t reg = readReg(MCP23S17_IOCR);
+  if (reg & MCP23S17_IOCR_ODR) return 2;
+  if (reg & MCP23S17_IOCR_INTPOL) return 1;
+  return 0;
 }
 
 

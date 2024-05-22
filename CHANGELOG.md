@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
 ## [0.5.2] - 2024-05-19
-- Fix #40, add interrupt functions
+- Fix #40, add several interrupt functions (experimental)
 - update **MCP23S17_registers.h**
 - change return type of several functions
   - e.g **bool enable/disableControlRegister()**

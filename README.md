@@ -202,12 +202,16 @@ Determine which pins caused the Interrupt. (datasheet).
 Is used to detect if multiple pins triggered an interrupt.
 
 
+- **bool setInterruptPolarity(uint8_t ipol)** polarity: 0 = LOW, 1 = HIGH, 2 = NONE/ODR
+- **uint8_t getInterruptPolarity()** return set value.
+
+
 Merge INTA and INTB into one signal so only one line handles all interrupts.
 This reduces the number of interrupt lines to handle, however one has 
 to read more registers to find the changed ones.
 
 - **bool mirrorInterrupts(bool on)** enables / disables mirror mode.
-- **bool isMirroredInterrupts()** returns set option.
+- **bool isMirroredInterrupts()** returns set option (0,1 or 2).
 
 
 ### IO Control Register

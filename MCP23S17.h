@@ -101,6 +101,10 @@ public:
   uint16_t getInterruptFlagRegister();
   uint16_t getInterruptCaptureRegister();
 
+  //       polarity: 0 = LOW, 1 = HIGH, 2 = NONE/ODR
+  bool     setInterruptPolarity(uint8_t polarity);
+  uint8_t  getInterruptPolarity();
+
   //       merge INTA and INTB
   bool     mirrorInterrupts(bool on);
   bool     isMirroredInterrupts();
