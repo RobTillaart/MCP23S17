@@ -650,13 +650,13 @@ bool MCP23S17::disableInterrupt16(uint16_t mask)
 //  which pins caused the INT?
 uint16_t MCP23S17::getInterruptFlagRegister()
 {
-  return readReg(MCP23S17_INTF_A);
+  return readReg16(MCP23S17_INTF_A);
 }
 
 
 uint16_t MCP23S17::getInterruptCaptureRegister()
 {
-  return readReg(MCP23S17_INTCAP_A);
+  return readReg16(MCP23S17_INTCAP_A);
 }
 
   //       polarity: 0 = LOW, 1 = HIGH, 2 = NONE/ODR
