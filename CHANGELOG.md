@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - update **MCP23S17_registers.h**
 - change return type of several functions
   - e.g **bool enable/disableControlRegister()**
+- fix support for ARDUINO_ARCH_MBED
 - update readme.md
 - update keywords.txt
 
