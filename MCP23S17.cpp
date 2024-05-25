@@ -552,7 +552,7 @@ bool MCP23S17::getPullup16(uint16_t &mask)
 //  INTERRUPTS (experimental, see MCP23S17 - #40)
 //
 //  TODO, catch writeReg errors
-//  TODO, MCP23S17_INT_MODE_ERROR?
+//  TODO, MCP23x17_INT_MODE_ERROR?
 //  TODO, if register not changed no need to update?
 //  TODO, 8 bits optimize? more code vs speed?
 //
@@ -787,7 +787,7 @@ uint8_t MCP23S17::readReg(uint8_t reg)
   if (reg > MCP23x17_OLAT_B)
   {
     _error = MCP23S17_REGISTER_ERROR;
-    return false;
+    return 0;
   }
 
 //  start read
@@ -868,7 +868,7 @@ uint16_t MCP23S17::readReg16(uint8_t reg)
   if (reg > MCP23x17_OLAT_B)
   {
     _error = MCP23S17_REGISTER_ERROR;
-    return false;
+    return 0;
   }
 
 //  start read

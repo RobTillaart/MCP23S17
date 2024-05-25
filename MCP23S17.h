@@ -10,7 +10,7 @@
 
 #include "Arduino.h"
 #include "SPI.h"
-#include "MCP23S17_registers.h"
+#include "MCP23x17_registers.h"
 
 
 #define MCP23S17_LIB_VERSION              (F("0.5.2"))
