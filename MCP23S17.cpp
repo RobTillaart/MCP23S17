@@ -629,7 +629,7 @@ bool MCP23S17::enableInterrupt16(uint16_t mask, uint8_t mode)
     else if (mode == FALLING)
     {
       intcon = mask;
-      defval = ~mask;  //  FALLING == compare to 1
+      defval = mask;  //  FALLING == compare to 1
     }
     writeReg16(MCP23S17_DEFVAL_A, defval);
   }

@@ -24,6 +24,7 @@
 #define MCP23S17_REGISTER_ERROR           0xFF
 #define MCP23S17_INVALID_READ             0xFF
 
+
 #ifndef __SPI_CLASS__
   //  MBED must be tested before RP2040
   #if defined(ARDUINO_ARCH_MBED)
