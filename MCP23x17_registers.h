@@ -3,6 +3,7 @@
 //    FILE: MCP23x17_registers.h
 //  AUTHOR: Rob Tillaart
 // PURPOSE: MCP23x17 register file
+//     URL: https://github.com/RobTillaart/MCP23017_RT
 //     URL: https://github.com/RobTillaart/MCP23S17
 
 
