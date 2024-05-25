@@ -218,13 +218,25 @@ to read more registers to find the changed ones.
 - **bool isMirroredInterrupts()** returns set option (0,1 or 2).
 
 
+### SPI
+
+- **void setSPIspeed(uint32_t speed)** set hardware speed (8Mb default).
+- **uint32_t getSPIspeed()** returns set speed.
+
+
+### Debugging
+
+- **bool usesHWSPI()** returns true = hardware SPI, false = software SPI.
+- **int lastError()** idem.
+
+
 ### IO Control Register
 
 The library supports setting bit fields in the IO control register.
 Read the datasheet carefully!
 
-- **bool enableControlRegister(uint8_t mask)**
-- **bool disableControlRegister(uint8_t mask)**
+- **bool enableControlRegister(uint8_t mask)** set IOCR bit fields
+- **bool disableControlRegister(uint8_t mask)** clear IOCR bit fields
 
 
 |  constant              |  mask  |  description  |
