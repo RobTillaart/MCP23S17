@@ -44,9 +44,9 @@ const uint32_t MCP23S17_MAX_SPI_SPEED = 10000000;
 class MCP23S17
 {
 public:
-  //  SOFTWARE SPI
+  //       SOFTWARE SPI
   MCP23S17(uint8_t select, uint8_t dataIn, uint8_t dataOut, uint8_t clock, uint8_t address = 0x00);
-  //  HARDWARE SPI
+  //       HARDWARE SPI
   MCP23S17(int select, __SPI_CLASS__ * spi);
   MCP23S17(int select, int address = 0x00, __SPI_CLASS__ * spi = &SPI);
 
@@ -55,8 +55,8 @@ public:
   uint8_t  getAddress();   //  default returns 0x00
 
 
-  //  single pin interface
-  //  mode: 0 = OUTPUT, 1 = INPUT, 1 = INPUT_PULLUP (==INPUT)
+  //       single pin interface
+  //       mode: 0 = OUTPUT, 1 = INPUT, 1 = INPUT_PULLUP (==INPUT)
   bool     pinMode1(uint8_t pin, uint8_t mode);
   bool     write1(uint8_t pin, uint8_t value);
   uint8_t  read1(uint8_t pin);
@@ -67,9 +67,9 @@ public:
   bool     getPullup(uint8_t pin, bool &pullup);
 
 
-  //  8 pins interface
-  //  port  = 0..1
-  //  value = bit pattern
+  //       8 pins interface
+  //       port  = 0..1
+  //       value = bit pattern
   bool     pinMode8(uint8_t port, uint8_t value);
   bool     write8(uint8_t port, uint8_t value);
   int      read8(uint8_t port);
@@ -80,8 +80,8 @@ public:
   bool     getPullup8(uint8_t port, uint8_t &mask);
 
 
-  //  16 pins interface
-  //  value = bit pattern
+  //       16 pins interface
+  //       value = bit pattern
   bool     pinMode16(uint16_t value);
   bool     write16(uint16_t value);
   uint16_t read16();
@@ -123,7 +123,7 @@ public:
   bool     usesHWSPI() { return _hwSPI; };
   int      lastError();
 
-  //       set/clear IOCR bit fields  (0.2.3 experimental)
+  //       set/clear IOCR bit fields
   bool     enableControlRegister(uint8_t mask);
   bool     disableControlRegister(uint8_t mask);
   //       0.2.5 experimental
@@ -131,14 +131,13 @@ public:
   bool     disableHardwareAddress();
 
 
-private:
-  //       access to low level registers (just make these two functions public).
+protected:
+  //       access to low level registers (just make these functions public).
   //       USE WITH CARE !!!
   bool     writeReg(uint8_t reg, uint8_t value);
   uint8_t  readReg(uint8_t reg);
   bool     writeReg16(uint8_t reg, uint16_t value);
   uint16_t readReg16(uint8_t reg);
-
 
   uint8_t  _address = 0;
   uint8_t  _select  = 0;
@@ -149,7 +148,7 @@ private:
 
   bool     _hwSPI = true;
 
-  //  10 MHz is maximum, 8 is a better clock divider on AVR.
+  //       10 MHz is maximum, 8 is a better clock divider on AVR.
   uint32_t    _SPIspeed = MCP23S17_TYP_SPI_SPEED;
   __SPI_CLASS__ * _mySPI;
   SPISettings     _spi_settings;
