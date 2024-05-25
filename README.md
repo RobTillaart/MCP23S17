@@ -21,6 +21,9 @@ This library gives easy control over the 16 pins of a (SPI) MCP23S17 chip.
 This IC is strongly related to the MCP23017 I2C port expander - https://github.com/RobTillaart/MCP23017_RT
 Programming Interface is kept the same as much as possible.
 
+The **write1(pin, value)** is optimized. 
+If a pin is not changed it will not be written again to save time.
+
 
 #### 0.5.0 Breaking change
 
@@ -66,6 +69,7 @@ Also it makes the library a bit simpler to maintain.
 - https://github.com/RobTillaart/MCP23017_RT
 - https://github.com/RobTillaart/MCP23S17
 - https://github.com/RobTillaart/PCF8575
+- https://github.com/RobTillaart/TCA9555
 
 
 8 bit port expanders
@@ -81,6 +85,7 @@ Also it makes the library a bit simpler to maintain.
 #include "MCP23S17.h"
 ```
 
+
 ### Constructor
 
 - **MCP23S17(uint8_t select, uint8_t dataIn, uint8_t dataOut, uint8_t clock, uint8_t address = 0x00)** constructor SOFTWARE SPI.
@@ -94,6 +99,7 @@ Returns false if not connected or a register could not be set.
 - **bool isConnected()** returns true if connected, false otherwise. (dummy for compatibility reasons)
 - **uint8_t getAddress()** returns the address set in the constructor. 
 Default = 0, range = 0..7.
+
 
 The two hardware constructors allow to call 4 different constructors.
 
@@ -158,9 +164,7 @@ Returns true if successful.
 ### 16 pins interface
 
 - **bool pinMode16(uint16_t value)** value = 0..0xFFFF, returns true if successful.
-Returns true if successful.
 - **bool write16(uint16_t value)** value = 0..0xFFFF, returns true if successful.
-Returns true if successful.
 - **uint16_t read16()** reads 16 pins into an uint16_t.
 - **bool setPolarity16(uint16_t mask)** sets polarity for 16 channels.
 Returns true if successful.
@@ -171,7 +175,7 @@ Returns true if successful.
 - **bool getPullup16(uint16_t &mask)** reads pull-up for 16 channels.
 Returns true if successful.
 
-Since 0.2.6 the reading and writing to registers have been performance optimized for the 16 bit interface.
+The reading and writing to registers have been performance optimized for the 16 bit interface.
 If there are problems please open an issue.
 
 
@@ -216,7 +220,7 @@ to read more registers to find the changed ones.
 
 ### IO Control Register
 
-Since 0.2.3 the library supports setting bit fields in the IO control register.
+The library supports setting bit fields in the IO control register.
 Read the datasheet carefully!
 
 - **bool enableControlRegister(uint8_t mask)**
@@ -235,7 +239,7 @@ Read the datasheet carefully!
 |  MCP23S17_IOCR_NI      |  0x01  |  Not implemented. 
 
 
-Two dedicated functions are added since 0.2.5.
+Two dedicated functions are added: (MCP23S17 only)
 
 - **bool enableHardwareAddress()** set IOCR_HAEN  bit.
 - **bool disableHardwareAddress()** clear IOCR_HAEN bit.
@@ -256,41 +260,40 @@ Reading it will reset the flag to **MCP23S17_OK**.
 |  MCP23S17_VALUE_ERROR     |  0x83   |
 |  MCP23S17_PORT_ERROR      |  0x84   |
 |  MCP23S17_REGISTER_ERROR  |  0xFF   |  low level.
-
-
-## Operation
-
-See examples.
+|  MCP23S17_INVALID_READ    |  0xFF   |  low level.
 
 
 ## Future
 
 #### Must
 
-- improve documentation
+- Improve and extend documentation
+- add examples
 
 #### Should
 
+- keep functional in sync
+  - sync error codes to MCP23x17
 - buy additional hardware
-- keep functional in sync with MCP23017_RT
 - test with multiple devices.
   - multi SELECT lines
 - add example with interrupts
-  - test 
+  - test
+  - extend error codes
+- optimize code - squeeze footprint
+- fix TODO's in code
 - IOCON.HAEN, Hardware Address ENable.
   - should this be enabled in **begin()** by default?  0.3.0
   - check address range in constructor.
-- enhance INTERRUPTS, IOCON.ODR and IOCON.INTPOL to set polarity.
-  - **bool setInterruptPolarity(polarity)** + getter
-      HIGH LOW Open Drain?
-- fix TODO's in code
 
-#### Could 
+#### Could
 
 - check need for writing in all functions (Polarity / Pull-up)
   - check if bit mask changes.
   - what is performance gain vs footprint?
 - investigate and reimplement the INPUT_PULLUP for pinMode() ?
+- initial value (16 bit?) as begin parameter (breaking change)
+  - depends on input output pull-up etc
 - AVR software SPI optimize
   - dao and clock - see fastShiftOut.
 
