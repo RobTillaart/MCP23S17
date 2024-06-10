@@ -66,6 +66,7 @@ bool MCP23S17::begin(bool pullup)
   if (! isConnected()) return false;
 
   //  disable address increment - datasheet P20
+  //  readReg16() and writeReg16() will not work with address increment disabled.
   //    SEQOP: Sequential Operation mode bit
   //    1 = Sequential operation disabled, address pointer does not increment.
   //    0 = Sequential operation enabled, address pointer increments.
@@ -833,11 +834,6 @@ bool MCP23S17::writeReg16(uint8_t reg, uint16_t value)
     _mySPI->transfer(MCP23S17_WRITE_REG | _address );
     _mySPI->transfer(reg);
     _mySPI->transfer(value >> 8);
-    ::digitalWrite(_select, HIGH);
-
-    ::digitalWrite(_select, LOW);
-    _mySPI->transfer(MCP23S17_WRITE_REG | _address );
-    _mySPI->transfer(reg + 1);
     _mySPI->transfer(value & 0xFF);
     _mySPI->endTransaction();
   }
@@ -847,11 +843,6 @@ bool MCP23S17::writeReg16(uint8_t reg, uint16_t value)
     swSPI_transfer(MCP23S17_WRITE_REG | _address );
     swSPI_transfer(reg);
     swSPI_transfer(value >> 8);
-    ::digitalWrite(_select, HIGH);
-
-    ::digitalWrite(_select, LOW);
-    swSPI_transfer(MCP23S17_WRITE_REG | _address );
-    swSPI_transfer(reg + 1);
     swSPI_transfer(value & 0xFF);
   }
   ::digitalWrite(_select, HIGH);
@@ -880,11 +871,6 @@ uint16_t MCP23S17::readReg16(uint8_t reg)
     _mySPI->transfer(MCP23S17_READ_REG | _address );
     _mySPI->transfer(reg);
     rv = _mySPI->transfer(0xFF) << 8;
-    ::digitalWrite(_select, HIGH);
-
-    ::digitalWrite(_select, LOW);
-    _mySPI->transfer(MCP23S17_READ_REG | _address );
-    _mySPI->transfer(reg + 1);
     rv += _mySPI->transfer(0xFF);
     _mySPI->endTransaction();
   }
@@ -894,11 +880,6 @@ uint16_t MCP23S17::readReg16(uint8_t reg)
     swSPI_transfer(MCP23S17_READ_REG | _address );
     swSPI_transfer(reg);
     rv = swSPI_transfer(0xFF) << 8;
-    ::digitalWrite(_select, HIGH);
-
-    ::digitalWrite(_select, LOW);
-    swSPI_transfer(MCP23S17_READ_REG | _address );
-    swSPI_transfer(reg + 1);
     rv += swSPI_transfer(0xFF);
   }
   ::digitalWrite(_select, HIGH);
