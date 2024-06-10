@@ -66,7 +66,7 @@ bool MCP23S17::begin(bool pullup)
   if (! isConnected()) return false;
 
   //  disable address increment - datasheet P20
-  //  note that readReg16() and writeReg16() will not work with address increment disabled.
+  //  note that address increment must be enabled for readReg16() and writeReg16() to work.
   //    SEQOP: Sequential Operation mode bit
   //    1 = Sequential operation disabled, address pointer does not increment.
   //    0 = Sequential operation enabled, address pointer increments.
