@@ -71,11 +71,11 @@ bool MCP23S17::begin(bool pullup)
   //    1 = Sequential operation disabled, address pointer does not increment.
   //    0 = Sequential operation enabled, address pointer increments.
   //  if (! writeReg(MCP23017_IOCR, MCP23017_IOCR_SEQOP)) return false;
-  uint8_t reg = readReg(MCP23017_IOCR);
-  if (reg & MCP23017_IOCR_SEQOP)  //  check if already zero
+  uint8_t reg = readReg(MCP23x17_IOCR);
+  if (reg & MCP23x17_IOCR_SEQOP)  //  check if already zero
   {
-    reg &= ~MCP23017_IOCR_SEQOP;  //  clear SEQOP bit for sequential read/write
-    if (! writeReg(MCP23017_IOCR, reg)) return false;
+    reg &= ~MCP23x17_IOCR_SEQOP;  //  clear SEQOP bit for sequential read/write
+    if (! writeReg(MCP23x17_IOCR, reg)) return false;
   }
 
   if (pullup)
