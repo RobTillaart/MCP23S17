@@ -150,7 +150,7 @@ Returns true if successful.
 
 ### 8 pins interface
 
-- **bool pinMode8(uint8_t port, uint8_t value)** port = 0..1, value = 0..255. Returns true if successful.
+- **bool pinMode8(uint8_t port, uint8_t mask)** port = 0..1, mask = 0..255. Returns true if successful.
 - **bool write8(uint8_t port, uint8_t value)** port = 0..1, value = 0..255. Returns true if successful.
 - **uint8_t read8(uint8_t port)** port = 0..1, reads 8 pins into one byte.
 - **bool setPolarity8(uint8_t port, uint8_t mask)** port = 0..1, sets polarity for 8 channels at once.
@@ -165,7 +165,7 @@ Returns true if successful.
 
 ### 16 pins interface
 
-- **bool pinMode16(uint16_t value)** value = 0..0xFFFF, returns true if successful.
+- **bool pinMode16(uint16_t mask)** mask = 0..0xFFFF, returns true if successful.
 - **bool write16(uint16_t value)** value = 0..0xFFFF, returns true if successful.
 - **uint16_t read16()** reads 16 pins into an uint16_t.
 - **bool setPolarity16(uint16_t mask)** sets polarity for 16 channels.
