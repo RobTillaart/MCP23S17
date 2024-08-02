@@ -637,7 +637,7 @@ bool MCP23S17::enableInterrupt(uint8_t pin, uint8_t mode)
 	gpinten |= mask;
 	if (pre_gpinten != gpinten)
 	{
-		return writeReg(GPINTENREG, value);
+		return writeReg(GPINTENREG, gpinten);
 	}
 	else
 	{
@@ -672,7 +672,7 @@ bool MCP23S17::disableInterrupt(uint8_t pin)
 	gpinten &= ~mask;
 	if (pre_gpinten != gpinten)
 	{
-		return writeReg(GPINTENREG, value);
+		return writeReg(GPINTENREG, gpinten);
 	}
 	else
 	{
