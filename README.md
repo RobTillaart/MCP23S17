@@ -26,7 +26,7 @@ If a pin is not changed it will not be written again to save time.
 
 ### 0.6.0 Breaking change
 
-Fixed #48, enable interrupt handling.
+Fix for #47, bug in enable interrupt handling.
 Pre 0.6.0 versions are obsolete.
 
 ### 0.5.0 Breaking change

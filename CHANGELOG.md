@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
 ## [0.6.0] - 2024-11-19
-- fix #48, interrupt handling. Kudos to GlibSkunk!
+- fix #47, interrupt handling. Kudos to GlibSkunk!
 - update readme.md
 - minor edits.
 
