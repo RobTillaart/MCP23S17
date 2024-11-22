@@ -187,7 +187,6 @@ If there are problems please open an issue.
 ### Interrupts (experimental 0.5.2)
 
 Read the datasheet for the details, page 24,25.  
-Note: Error handling is limited.
 
 pin = 0..15  
 mode = { RISING, FALLING, CHANGE }  
