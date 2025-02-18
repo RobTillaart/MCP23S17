@@ -24,9 +24,13 @@ Programming Interface is kept the same as much as possible.
 The **write1(pin, value)** is optimized. 
 If a pin is not changed it will not be written again to save time.
 
+### 0.7.0 Breaking change
+
+Fix #50, reverse byte order in 16 bit interface to be intuitive / logic.
+
 ### 0.6.0 Breaking change
 
-Fix for #47, bug in enable interrupt handling.
+Fix #47, bug in enable interrupt handling.
 Pre 0.6.0 versions are obsolete.
 
 ### 0.5.0 Breaking change

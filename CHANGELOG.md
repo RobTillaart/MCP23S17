@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## [0.7.0] - 2025-02-18
+- fix #50, breaking change 16 bit API byte order to be intuitive / logic.
+- update readme.md
+
+----
+
 ## [0.6.1] - 2025-01-20
 - Sync MCP23017 PR #41 interrupt functions.
 - add link to keypad library

@@ -1,7 +1,7 @@
 //
 //    FILE: MCP23S17.cpp
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.6.1
+// VERSION: 0.7.0
 // PURPOSE: Arduino library for SPI MCP23S17 16 channel port expander
 //    DATE: 2021-12-30
 //     URL: https://github.com/RobTillaart/MCP23S17
@@ -954,8 +954,8 @@ bool MCP23S17::writeReg16(uint8_t reg, uint16_t value)
     //  _address already shifted
     _mySPI->transfer(MCP23S17_WRITE_REG | _address );
     _mySPI->transfer(reg);
-    _mySPI->transfer(value >> 8);
     _mySPI->transfer(value & 0xFF);
+    _mySPI->transfer(value >> 8);
     _mySPI->endTransaction();
   }
   else
@@ -963,8 +963,8 @@ bool MCP23S17::writeReg16(uint8_t reg, uint16_t value)
     //  _address already shifted
     swSPI_transfer(MCP23S17_WRITE_REG | _address );
     swSPI_transfer(reg);
-    swSPI_transfer(value >> 8);
     swSPI_transfer(value & 0xFF);
+    swSPI_transfer(value >> 8);
   }
   ::digitalWrite(_select, HIGH);
   return true;
@@ -991,8 +991,8 @@ uint16_t MCP23S17::readReg16(uint8_t reg)
     //  _address already shifted
     _mySPI->transfer(MCP23S17_READ_REG | _address );
     _mySPI->transfer(reg);
-    rv = _mySPI->transfer(0xFF) << 8;
-    rv += _mySPI->transfer(0xFF);
+    rv = _mySPI->transfer(0xFF);
+    rv += _mySPI->transfer(0xFF) << 8;
     _mySPI->endTransaction();
   }
   else
@@ -1000,8 +1000,8 @@ uint16_t MCP23S17::readReg16(uint8_t reg)
     //  _address already shifted
     swSPI_transfer(MCP23S17_READ_REG | _address );
     swSPI_transfer(reg);
-    rv = swSPI_transfer(0xFF) << 8;
-    rv += swSPI_transfer(0xFF);
+    rv = swSPI_transfer(0xFF);
+    rv += swSPI_transfer(0xFF) << 8;
   }
   ::digitalWrite(_select, HIGH);
   return rv;
