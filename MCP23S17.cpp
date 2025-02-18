@@ -101,6 +101,12 @@ uint8_t MCP23S17::getAddress()
 }
 
 
+void MCP23S17::reverse16ByteOrder(bool reverse)
+{
+  _reverse16ByteOrder = reverse;
+}
+
+
 ///////////////////////////////////////////////////////////////////
 //
 //  single pin interface
@@ -946,6 +952,11 @@ bool MCP23S17::writeReg16(uint8_t reg, uint16_t value)
     return false;
   }
 
+  if (_reverse16ByteOrder)  //  swap regA and regB
+  {
+    value = (value >> 8) | (value << 8);
+  }
+
 //  start write
   ::digitalWrite(_select, LOW);
   if (_hwSPI)
@@ -954,8 +965,8 @@ bool MCP23S17::writeReg16(uint8_t reg, uint16_t value)
     //  _address already shifted
     _mySPI->transfer(MCP23S17_WRITE_REG | _address );
     _mySPI->transfer(reg);
-    _mySPI->transfer(value & 0xFF);
     _mySPI->transfer(value >> 8);
+    _mySPI->transfer(value & 0xFF);
     _mySPI->endTransaction();
   }
   else
@@ -963,8 +974,8 @@ bool MCP23S17::writeReg16(uint8_t reg, uint16_t value)
     //  _address already shifted
     swSPI_transfer(MCP23S17_WRITE_REG | _address );
     swSPI_transfer(reg);
-    swSPI_transfer(value & 0xFF);
     swSPI_transfer(value >> 8);
+    swSPI_transfer(value & 0xFF);
   }
   ::digitalWrite(_select, HIGH);
   return true;
@@ -973,7 +984,8 @@ bool MCP23S17::writeReg16(uint8_t reg, uint16_t value)
 
 uint16_t MCP23S17::readReg16(uint8_t reg)
 {
-  uint16_t rv = 0;
+  uint16_t regA = 0;
+  uint16_t regB = 0;
 
   _error = MCP23S17_OK;
 
@@ -991,8 +1003,8 @@ uint16_t MCP23S17::readReg16(uint8_t reg)
     //  _address already shifted
     _mySPI->transfer(MCP23S17_READ_REG | _address );
     _mySPI->transfer(reg);
-    rv = _mySPI->transfer(0xFF);
-    rv += _mySPI->transfer(0xFF) << 8;
+    regA = _mySPI->transfer(0xFF);
+    regB = _mySPI->transfer(0xFF);
     _mySPI->endTransaction();
   }
   else
@@ -1000,11 +1012,16 @@ uint16_t MCP23S17::readReg16(uint8_t reg)
     //  _address already shifted
     swSPI_transfer(MCP23S17_READ_REG | _address );
     swSPI_transfer(reg);
-    rv = swSPI_transfer(0xFF);
-    rv += swSPI_transfer(0xFF) << 8;
+    regA = swSPI_transfer(0xFF);
+    regB = swSPI_transfer(0xFF);
   }
   ::digitalWrite(_select, HIGH);
-  return rv;
+
+  if (_reverse16ByteOrder)
+  {
+    return (regB << 8) | regA;
+  }
+  return (regA << 8) | regB;
 }
 
 

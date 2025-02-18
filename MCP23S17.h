@@ -54,6 +54,11 @@ public:
   bool     isConnected();
   uint8_t  getAddress();   //  default returns 0x00
 
+  //       Fix #50, reverse the byte order of the 16 bit API.
+  //       reverse == false ==> backwards compatible (default)
+  //       reverse == true ==> swaps the A and B byte to be more intuitive.
+  void     reverse16ByteOrder(bool reverse = false); 
+
 
   //       single pin interface
   //       mode = INPUT, OUTPUT, INPUT_PULLUP (= same as INPUT)
@@ -157,6 +162,7 @@ protected:
   uint8_t  _error   = MCP23S17_OK;
 
   bool     _hwSPI = true;
+  bool     _reverse16ByteOrder = false;
 
   //       10 MHz is maximum, 8 is a better clock divider on AVR.
   uint32_t    _SPIspeed = MCP23S17_TYP_SPI_SPEED;
