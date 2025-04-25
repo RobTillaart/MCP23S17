@@ -57,7 +57,7 @@ public:
   //       Fix #50, reverse the byte order of the 16 bit API.
   //       reverse == false ==> backwards compatible (default)
   //       reverse == true ==> swaps the A and B byte to be more intuitive.
-  void     reverse16ByteOrder(bool reverse = false); 
+  void     reverse16ByteOrder(bool reverse = false);
 
 
   //       single pin interface
